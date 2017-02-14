@@ -1,0 +1,38 @@
+{
+  "name": "document-management_app",
+  "version": "1.0.0",
+  "description": "A document management app with users and roles",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela-jkanyua/cp2-Document-Management-App.git"
+  },
+  "keywords": [
+    "app",
+    "document",
+    "checkpoint",
+    "management"
+  ],
+  "author": "Jimnah Magira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andela-jkanyua/cp2-Document-Management-App/issues"
+  },
+  "homepage": "https://github.com/andela-jkanyua/cp2-Document-Management-App#readme",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "morgan": "^1.8.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.2.0"
+  }
+}
