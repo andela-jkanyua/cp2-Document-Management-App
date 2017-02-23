@@ -1,40 +1,39 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => 
+  up: (queryInterface, Sequelize) =>
   queryInterface.createTable('Documents', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER,
+    },
+    title: {
+      type: Sequelize.STRING,
+    },
+    content: {
+      type: Sequelize.TEXT,
+    },
+    dateCreated: {
+      type: Sequelize.DATE,
+    },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
+    userId: {
+      type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+        as: 'userId',
       },
-      title: {
-        type: Sequelize.STRING
-      },
-      content: {
-        type: Sequelize.TEXT
-      },
-      dateCreated: {
-        type: Sequelize.DATE
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        allowNull: false ,
-        references: {
-          model: 'Users',
-          key: 'id',
-          as: 'userId',
-        },
-      },
-    }),
-  down: (queryInterface /*, Sequelize */) => 
-    queryInterface.dropTable('Documents'),
-  };
+    },
+  }),
+  down: queryInterface => queryInterface.dropTable('Documents'),
+};

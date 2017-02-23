@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => 
+  up: (queryInterface, Sequelize) =>
     queryInterface.createTable('Users', {
       id: {
         allowNull: false,
@@ -10,6 +10,9 @@ module.exports = {
       email: {
         allowNull: false,
         type: Sequelize.STRING,
+        validate: {
+          isEmail: true,
+        },
       },
       password: {
         allowNull: false,
@@ -20,7 +23,7 @@ module.exports = {
       },
       lastName: {
         type: Sequelize.STRING,
-      },      
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -31,7 +34,7 @@ module.exports = {
       },
       roleId: {
         type: Sequelize.INTEGER,
-        allowNull: false, 
+        allowNull: false,
         references: {
           model: 'Roles',
           key: 'id',
@@ -39,6 +42,5 @@ module.exports = {
         },
       },
     }),
-  
-  down: (queryInterface  /* , Sequelize */) => queryInterface.dropTable('Users'),
+  down: queryInterface => queryInterface.dropTable('Users'),
 };
