@@ -27,7 +27,7 @@ module.exports = {
         model: Documents,
       }],
     })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return res.status(404).send({
           message: 'User Not Found',
@@ -40,7 +40,7 @@ module.exports = {
   update(req, res) {
     return Users
     .findById(req.params.userId)
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return res.status(404).send({
           message: 'User Not Found',
@@ -55,14 +55,14 @@ module.exports = {
           roleId: req.body.roleId || user.roleId,
         })
         .then(() => res.status(200).send(user))  // Send back the updated user.
-        .catch((error) => res.status(400).send(error));
+        .catch(error => res.status(400).send(error));
     })
-    .catch((error) => res.status(400).send(error));
-},  
-destroy(req, res) {
-  return Users
+    .catch(error => res.status(400).send(error));
+  },
+  destroy(req, res) {
+    return Users
     .findById(req.params.userId)
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return res.status(400).send({
           message: 'User Not Found',
@@ -70,9 +70,9 @@ destroy(req, res) {
       }
       return user
         .destroy()
-        .then(() => res.status(204).send())
+        .then(() => res.status(204).send(user))
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
-},
+  },
 };

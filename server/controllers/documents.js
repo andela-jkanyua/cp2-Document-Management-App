@@ -1,5 +1,5 @@
-//const Users = require('../models').Users;
 const Documents = require('../models').Documents;
+
 module.exports = {
   create(req, res) {
     return Documents
@@ -21,7 +21,7 @@ module.exports = {
   retrieveUserDocuments(req, res) {
     return Documents
     .findAll({ where: { userId: req.params.userId } })
-    .then(document => {
+    .then((document) => {
       if (!Documents) {
         return res.status(404).send({
           message: 'User has no Documents',
@@ -34,7 +34,7 @@ module.exports = {
   retrieve(req, res) {
     return Documents
     .findById(req.params.docId)
-    .then(doc => {
+    .then((doc) => {
       if (!doc) {
         return res.status(404).send({
           message: 'Document Not Found',
@@ -43,11 +43,11 @@ module.exports = {
       return res.status(200).send(doc);
     })
     .catch(error => res.status(400).send(error));
-},
-update(req, res) {
+  },
+  update(req, res) {
     return Documents
     .findById(req.params.docId)
-    .then(doc => {
+    .then((doc) => {
       if (!doc) {
         return res.status(404).send({
           message: 'Document Cannot be Found and Updated',
@@ -60,24 +60,45 @@ update(req, res) {
           dateCreated: req.body.dateCreated || doc.dateCreated,
         })
         .then(() => res.status(200).send(doc))  // Send back the updated document.
-        .catch((error) => res.status(400).send(error));
+        .catch(error => res.status(400).send(error));
     })
-    .catch((error) => res.status(400).send(error));
-}, 
-destroy(req, res) {
-  return Documents
+    .catch(error => res.status(400).send(error));
+  },
+  destroy(req, res) {
+    return Documents
     .findById(req.params.docId)
-    .then(doc => {
+    .then((doc) => {
       if (!doc) {
         return res.status(400).send({
           message: 'Document Not Found',
         });
       }
-      return doc
-        .destroy()
-        .then(() => res.status(204).send())
-        .catch(error => res.status(400).send(error));
+      return res.status(204).send(doc);
     })
     .catch(error => res.status(400).send(error));
-}, 
+  },
+  findAll(req, res) {
+    return Documents
+    .findAll({
+      where: {
+        $or: [
+          {
+            title: { $iLike: `%${req.body.search}%` },
+          },
+          {
+            content: { $iLike: `%${req.body.search}%` },
+          },
+        ],
+      },
+    })
+    .then((document) => {
+      if (!Documents) {
+        return res.status(404).send({
+          message: 'No Documents',
+        });
+      }
+      return res.status(200).send(document);
+    })
+    .catch(error => res.status(400).send(error));
+  },
 };
