@@ -9,12 +9,12 @@ const morgan = require('morgan'); // log requests to the console (express4)
 
 const bodyParser = require('body-parser'); // pull information from HTML POST (express4)
 
-//const indexFile = require('./src/inverted-index.js');
+// const indexFile = require('./src/inverted-index.js');
 
 let content;
 
 // Initialization
-//const index = new indexFile.Index();
+// const index = new indexFile.Index();
 
 // configuration =================;
 
@@ -25,10 +25,12 @@ app.use(bodyParser.json());  // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 
 // routes ======================================================================
+
 require('./routes/index')(app);
 // api ---------------------------------------------------------------------
 
 // listen port 5000 on localhost(start app with node server.js) =======
 app.listen(process.env.PORT || 5000);
-console.log('Server on port 5000')
-module.exports = app
+console.log('Server on port 5000');
+console.log(app.get('env'));
+module.exports = app;

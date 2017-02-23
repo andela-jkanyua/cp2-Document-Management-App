@@ -15,16 +15,16 @@ module.exports = (app) => {
   app.delete('/users/:userId', usersController.destroy);
 
 
-
   // DOCUMENTS ENDPOINTS ==============;
   app.post('/documents', documentsController.create);
   app.get('/documents', documentsController.list);
   app.get('/documents/:docId', documentsController.retrieve);
   app.put('/documents/:docId', documentsController.update);
   app.delete('/documents/:docId', documentsController.destroy);
-  app.get('/users/:userId/documents', documentsController.retrieveUserDocuments);  
-  //app.get('/users/:userId/documents', usersController.retrieve); 
+  app.get('/users/:userId/documents', documentsController.retrieveUserDocuments);
+  app.post('/search/documents', documentsController.findAll);
 
   // ROUTES ENDPOINTS ==============;
   app.post('/roles', rolesController.create);
+  app.get('/roles', rolesController.list);
 };

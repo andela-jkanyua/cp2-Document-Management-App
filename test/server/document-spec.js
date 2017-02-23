@@ -1,14 +1,16 @@
+//Require the dev-dependencies
 const chai = require('chai');
-const expect = require('chai').expect;
+const chaiHttp = require('chai-http');
 const server = require('../../server/server');
-//const Document = require('../../server/models/Document');
+const should = chai.should();
+const expect = require('chai').expect;
+const documentsController = require('../../server/controllers').documents;
+const Documents = require('./helpers/documents');
+
+chai.use(chaiHttp);
 
 describe('Documents', () => {
-  describe('API endpoints', () => {
-    before((done) => {
-      done();
-    });
-    describe('GET Documents', () => {
+    describe('/GET Documents', () => {
       it('returns an array of all documents', (done) => {
         chai.request(server)
         .get('/documents')
@@ -18,6 +20,71 @@ describe('Documents', () => {
           done();
         });
       });
+      it('should GET a specific document', (done) => {
+        chai.request(server)
+        .get(`/documents/1`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('title');
+          done();
+        });
+      });
     });
+    describe('/POST documents', () => {
+      it('should POST a document with all fields', (done) => {
+        chai.request(server)
+        .post('/documents')
+        .send(Documents[0])
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.a('object');
+          res.body.title.should.be.eql('Helpful Spouse');
+          done();
+        });
+      });
+      it('should update a document', (done) => {
+        chai.request(server)
+        .put(`/documents/1`)
+        .send({title: 'Updated Title'})
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.title.should.be.eql('Updated Title');
+          done();
+        });
+      });
+      it('should Not POST a document without a title', (done) => {
+        chai.request(server)
+        .post('/documents')
+        .send({content: 'Document with content only'})
+        .end((err, res) => {
+          res.should.have.status(400);
+          expect(res.body.name).to.contain('SequelizeValidationError');
+          done();
+        });
+      });
+      it('should search documents for a term', (done) => {
+        chai.request(server)
+        .post('/search/documents')
+        .send({search: 'Lorem'})
+        .end((err, res) => {
+          res.should.have.status(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body[0].title).to.contain('Lorem ipsum dolor sit amet');
+          done();
+        });
+      });
+    });
+
+describe('/DELETE documents/:id', () => {
+  it('deletes document', (done) => {
+    chai.request(server)
+    .delete(`/documents/${Documents[0]._id}`)
+    .end((err, res)=>{
+      res.should.have.status(204);
+      done();
+    })
   });
+});
 });

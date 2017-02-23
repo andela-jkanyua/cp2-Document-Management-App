@@ -4,28 +4,16 @@ const chaiHttp = require('chai-http');
 const server = require('../../server/server');
 const should = chai.should();
 const expect = require('chai').expect;
+const usersController = require('../../server/controllers').users;
+const Users = require('./helpers/users');
 
-let Users //<-- add require  user model here..
-const user = {
-  email: "test@example.com",
-  password: "password",
-  role: 'admin',
-  firstName: 'Foo',
-  lastName: 'Bar'
-}
 //During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
+//process.env.NODE_ENV = 'test';
 
 chai.use(chaiHttp);
 //Our parent block
+describe('Users', () =>{
 
-/* describe('Users', () => {
-    beforeEach((done) => { // Before each test we empty the database
-         Users.remove({}, (err) => { 
-            done();         
-         });     
-     });
-*/
 
 /*
  * Test the users /GET route
@@ -37,7 +25,17 @@ describe('/GET users', () => {
     .end((err, res) => {
       res.should.have.status(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.eql(0);
+      res.body.length.should.not.be.eql(0);
+      done();
+    });
+  });
+  it('should GET a specific user', (done) => {
+    chai.request(server)
+    .get(`/users/3`)
+    .end((err, res) => {
+      res.should.have.status(200);
+      res.body.should.be.a('object');
+      res.body.should.have.property('firstName');
       done();
     });
   });
@@ -49,56 +47,71 @@ describe('/POST users', () => {
   it('should POST a user with all fields', (done) => {
     chai.request(server)
     .post('/users')
-    .send(user)
+    .send(Users[0])
+    .end((err, res) => {
+      res.should.have.status(201);
+      res.body.should.be.a('object');
+      res.body.email.should.be.eql('johndoe@example.com');
+      done();
+    });
+  });
+  it('should update a user', (done) => {
+    chai.request(server)
+    .put(`/users/1`)
+    .send({email: 'updated@email.com'})
     .end((err, res) => {
       res.should.have.status(200);
       res.body.should.be.a('object');
-      res.body.email.should.be.eql('text@example.com');
+      res.body.email.should.be.eql('updated@email.com');
       done();
     });
   });
   it('should NOT POST a user without all fields', (done) => {
-    let user = {
-      email: "test@example.com",
+    const invalidUser = {
       password: "password",
       firstName: 'Foo',
       lastName: 'Bar'
     }
     chai.request(server)
     .post('/users')
-    .send(user)
+    .send(invalidUser)
     .end((err, res) => {
       res.should.have.status(400);
       res.body.should.be.a('object');
       res.body.should.have.property('errors');
-      res.body.errors.should.have.property('role');
-      res.body.errors.role.should.have.property('kind').eql('required');
       done();
     });
   });
-  it('only accepts valid emails and usernames', (done) => {
-    chai.request(server)
-    .post('/users')
-    .send({
-      username: '!@#$%^&*',
-      email: '!@#$%^&*',
-      password: 'qazwsxedc',
+  it('only accepts valid emails', (done) => {
+    const invalidEmail = {
+      email: 'invalid-email',
+      password: 'qwerty',
       first_name: 'Foo',
       last_name: 'Bar',
-    })
+      roleId: '1',
+    }
+    chai.request(server)
+    .post('/users')
+    .send(invalidEmail)
     .end((err, res) => {
-      expect(res.status).to.equal(400);
-      expect(res.body.error).to.contain('Invalid input');
-      expect(res.body.messages).to.contain.all.keys('email', 'username');
-      expect(res.body.messages.email).to.contain('not a valid email address');
-      expect(res.body.messages.username).to.contain(`A username can only contain alphanumeric characters or an underscore`);
+      res.should.have.status(400);
+      console.log(res.body.name);
+      expect(res.body.errors[0].type).to.contain("Validation error");
+      expect(res.body.errors[0].message).to.contain("Validation isEmail failed");
+      expect(res.body.errors[0].path).to.contain('email');
+      expect(res.body.name).to.contain('SequelizeValidationError');
       done();
     });
   });
 });
 describe('DELETE /users/:id', () => {
   it('deletes user', (done) => {
-      expect(3).to.equal(4)
+    chai.request(server)
+    .delete(`/users/${Users[0]._id}`)
+    .end((err, res)=>{
+      res.should.have.status(204);
       done();
-    });
+    })
+  });
+});
 });
