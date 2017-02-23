@@ -3,6 +3,9 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isEmail: true,
+      },
     },
     password: {
       type: DataTypes.STRING,
@@ -16,8 +19,8 @@ module.exports = (sequelize, DataTypes) => {
         Users.hasMany(models.Documents, {
           foreignKey: 'userId',
         });
-        Users.belongsTo(models.Role,{
-          foreignKey:'roleId',
+        Users.belongsTo(models.Role, {
+          foreignKey: 'roleId',
         });
       },
     },

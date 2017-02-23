@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.TEXT,
     dateCreated: {
       type: DataTypes.DATE,
-      allowNull:false,
+      allowNull: false,
     },
   }, {
     classMethods: {
       associate: (models) => {
-        Documents.belongsTo(models.Users,{
+        Documents.belongsTo(models.Users, {
           foreignKey: 'userId',
           onDelete: 'CASCADE',
           allowNull: false,
