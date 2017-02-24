@@ -6,14 +6,22 @@ const should = chai.should();
 const expect = require('chai').expect;
 const documentsController = require('../../server/controllers').documents;
 const Documents = require('./helpers/documents');
+const Users = require('./helpers/users');
+const token = require('./helpers/token');
 
 chai.use(chaiHttp);
 
 describe('Documents', () => {
+  const tokens = {};
+  before((done) => {
+    tokens.user = token.generate(Users[0]);
+    done();
+  });
     describe('/GET Documents', () => {
       it('returns an array of all documents', (done) => {
         chai.request(server)
         .get('/documents')
+        .set('x-access-token', tokens.user)
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.an('array');
@@ -23,6 +31,7 @@ describe('Documents', () => {
       it('should GET a specific document', (done) => {
         chai.request(server)
         .get(`/documents/1`)
+        .set('x-access-token', tokens.user)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
@@ -35,6 +44,7 @@ describe('Documents', () => {
       it('should POST a document with all fields', (done) => {
         chai.request(server)
         .post('/documents')
+        .set('x-access-token', tokens.user)
         .send(Documents[0])
         .end((err, res) => {
           res.should.have.status(201);
@@ -46,6 +56,7 @@ describe('Documents', () => {
       it('should update a document', (done) => {
         chai.request(server)
         .put(`/documents/1`)
+        .set('x-access-token', tokens.user)
         .send({title: 'Updated Title'})
         .end((err, res) => {
           res.should.have.status(200);
@@ -57,6 +68,7 @@ describe('Documents', () => {
       it('should Not POST a document without a title', (done) => {
         chai.request(server)
         .post('/documents')
+        .set('x-access-token', tokens.user)
         .send({content: 'Document with content only'})
         .end((err, res) => {
           res.should.have.status(400);
@@ -67,6 +79,7 @@ describe('Documents', () => {
       it('should search documents for a term', (done) => {
         chai.request(server)
         .post('/search/documents')
+        .set('x-access-token', tokens.user)
         .send({search: 'Lorem'})
         .end((err, res) => {
           res.should.have.status(200);
@@ -81,6 +94,7 @@ describe('/DELETE documents/:id', () => {
   it('deletes document', (done) => {
     chai.request(server)
     .delete(`/documents/${Documents[0]._id}`)
+    .set('x-access-token', tokens.user)
     .end((err, res)=>{
       res.should.have.status(204);
       done();

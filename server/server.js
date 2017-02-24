@@ -1,6 +1,8 @@
 // server.js
 
 // set up ========================
+require('dotenv').config()
+
 const express = require('express');
 
 const app = express(); // create our app w/ express
@@ -8,10 +10,6 @@ const app = express(); // create our app w/ express
 const morgan = require('morgan'); // log requests to the console (express4)
 
 const bodyParser = require('body-parser'); // pull information from HTML POST (express4)
-
-// const indexFile = require('./src/inverted-index.js');
-
-let content;
 
 // Initialization
 // const index = new indexFile.Index();

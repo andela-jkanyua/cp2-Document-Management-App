@@ -5,7 +5,8 @@ const server = require('../../server/server');
 const should = chai.should();
 const expect = require('chai').expect;
 const usersController = require('../../server/controllers').roles;
-
+const Users = require('./helpers/users');
+const token = require('./helpers/token');
 
 //During the test the env variable is set to test
 //process.env.NODE_ENV = 'test';
@@ -17,9 +18,15 @@ chai.use(chaiHttp);
  * Test the users /GET route
  */
 describe('/GET roles', () => {
+  const tokens = {};
+  before((done) => {
+    tokens.user = token.generate(Users[0]);
+    done();
+  });
   it('it should GET all the roles', (done) => {
     chai.request(server)
     .get('/roles')
+    .set('x-access-token', tokens.user)
     .end((err, res) => {
       res.should.have.status(200);
       res.body.should.be.a('array');
@@ -29,6 +36,7 @@ describe('/GET roles', () => {
   it('creates a new role', (done) => {
     chai.request(server)
     .post(`/roles`)
+    .set('x-access-token', tokens.user)
     .send({title: 'New Role',
     	description: 'Role description'})
     .end((err, res) => {
@@ -40,6 +48,7 @@ describe('/GET roles', () => {
   it('does not POST invalid role', (done) =>{
   	chai.request(server)
   	.post('/roles')
+    .set('x-access-token', tokens.user)
   	.send({description: 'Role without title'})
   	.end((err,res) =>{
   		res.should.have.status(400);

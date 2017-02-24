@@ -7,9 +7,15 @@ module.exports = (app) => {
     message: 'Welcome to the DMA API!',
   }));
 
+  //AUTHENTICATION
+  app.post('/login', usersController.login);
+  app.post('/users', usersController.create); 
+   app.get('/users', usersController.list);
+  require('../middleware/auth')(app);
+
   // USERS ENDPOINTS =================;
-  app.post('/users', usersController.create);
-  app.get('/users', usersController.list);
+  
+ 
   app.get('/users/:userId', usersController.retrieve);
   app.put('/users/:userId', usersController.update);
   app.delete('/users/:userId', usersController.destroy);

@@ -6,6 +6,7 @@ const should = chai.should();
 const expect = require('chai').expect;
 const usersController = require('../../server/controllers').users;
 const Users = require('./helpers/users');
+const token = require('./helpers/token');
 
 //During the test the env variable is set to test
 //process.env.NODE_ENV = 'test';
@@ -13,8 +14,11 @@ const Users = require('./helpers/users');
 chai.use(chaiHttp);
 //Our parent block
 describe('Users', () =>{
-
-
+  const tokens = {};
+  before((done) => {
+    tokens.user = token.generate(Users[0]);
+    done();
+  });
 /*
  * Test the users /GET route
  */
@@ -22,6 +26,7 @@ describe('/GET users', () => {
   it('it should GET all the users', (done) => {
     chai.request(server)
     .get('/users')
+    .set('x-access-token', tokens.user)
     .end((err, res) => {
       res.should.have.status(200);
       res.body.should.be.a('array');
@@ -32,6 +37,7 @@ describe('/GET users', () => {
   it('should GET a specific user', (done) => {
     chai.request(server)
     .get(`/users/3`)
+    .set('x-access-token', tokens.user)
     .end((err, res) => {
       res.should.have.status(200);
       res.body.should.be.a('object');
@@ -47,7 +53,8 @@ describe('/POST users', () => {
   it('should POST a user with all fields', (done) => {
     chai.request(server)
     .post('/users')
-    .send(Users[0])
+    .set('x-access-token', tokens.user)
+    .send(Users[1])
     .end((err, res) => {
       res.should.have.status(201);
       res.body.should.be.a('object');
@@ -57,7 +64,8 @@ describe('/POST users', () => {
   });
   it('should update a user', (done) => {
     chai.request(server)
-    .put(`/users/1`)
+    .put(`/users/2`)
+    .set('x-access-token', tokens.user)
     .send({email: 'updated@email.com'})
     .end((err, res) => {
       res.should.have.status(200);
@@ -74,6 +82,7 @@ describe('/POST users', () => {
     }
     chai.request(server)
     .post('/users')
+    .set('x-access-token', tokens.user)
     .send(invalidUser)
     .end((err, res) => {
       res.should.have.status(400);
@@ -92,6 +101,7 @@ describe('/POST users', () => {
     }
     chai.request(server)
     .post('/users')
+    .set('x-access-token', tokens.user)
     .send(invalidEmail)
     .end((err, res) => {
       res.should.have.status(400);
@@ -108,6 +118,7 @@ describe('DELETE /users/:id', () => {
   it('deletes user', (done) => {
     chai.request(server)
     .delete(`/users/${Users[0]._id}`)
+    .set('x-access-token', tokens.user)
     .end((err, res)=>{
       res.should.have.status(204);
       done();

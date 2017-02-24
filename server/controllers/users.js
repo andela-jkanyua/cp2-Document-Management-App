@@ -1,18 +1,44 @@
 const Users = require('../models').Users;
 const Documents = require('../models').Documents;
+const jwt    = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 module.exports = {
+  login(req, res) {
+    Users.find({ where: { email: req.body.email } })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({
+          message: 'User Not Found',
+        });
+      } else if (user){
+        bcrypt.compare(req.body.password, user.password, function(err, auth) {
+          if (!auth){
+            res.json({success:false, message: 'Authentication Failed. Wrong Password'});
+          } else {
+            const token = jwt.sign(user.password, process.env.SECRET);
+            return res.json({success: true, message: 'Authenticated', token: token});
+          }
+        });
+      }
+    })
+    .catch(error => res.status(400).send(error));
+  },
   create(req, res) {
-    return Users
-      .create({
-        email: req.body.email,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        roleId: req.body.roleId,
-      })
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+      bcrypt.hash(req.body.password, salt, function(err, hash) {
+        Users.create({
+          email: req.body.email,
+          password: hash,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          roleId: req.body.roleId,
+        })
       .then(user => res.status(201).send(user))
       .catch(error => res.status(400).send(error));
+    });
+    });
   },
   list(req, res) {
     return Users
