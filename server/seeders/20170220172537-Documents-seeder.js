@@ -27,6 +27,7 @@ module.exports = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: '1',
+        access: 'public',
       }, {
         title: 'Top joke in Australia',
         content: `This woman rushed to see her doctor, looking very much worried and all 
