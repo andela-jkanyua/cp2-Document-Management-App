@@ -3,21 +3,29 @@ const Documents = require('../models').Documents;
 const jwt    = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const secret = process.env.SECRET;
 
 module.exports = {
   login(req, res) {
+    if(!(req.body.email && req.body.password)){
+      return res.status(400).json({success: false, message: 'User Email and Password required.'})
+    }
     Users.find({ where: { email: req.body.email } })
     .then((user) => {
       if (!user) {
         return res.status(404).send({
+          success: false,
           message: 'User Not Found',
         });
       } else if (user){
         bcrypt.compare(req.body.password, user.password, function(err, auth) {
           if (!auth){
-            res.json({success:false, message: 'Authentication Failed. Wrong Password'});
+            res.status(401).json({success:false, message: 'Authentication Failed. Wrong Password'});
           } else {
-            const token = jwt.sign(user.password, process.env.SECRET);
+            const token = jwt.sign({user: user}, secret, 
+            {
+            expiresIn : '24h'
+          });
             return res.json({success: true, message: 'Authenticated', token: token});
           }
         });
@@ -35,20 +43,30 @@ module.exports = {
           lastName: req.body.lastName,
           roleId: req.body.roleId,
         })
-      .then(user => res.status(201).send(user))
+      .then(user => res.status(201).send({message:`User email:, ${user.email} Created!`, success: true}))
       .catch(error => res.status(400).send(error));
     });
     });
   },
   list(req, res) {
     return Users
-    .all()
+    .all(
+    {
+      attributes: {
+        exclude: ['password', 'createdAt', 'updatedAt']
+      }
+    })
     .then(users => res.status(200).send(users))
     .catch(error => res.status(400).send(error));
   },
   retrieve(req, res) {
     return Users
     .findById(req.params.userId, {
+      
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt']
+    
+      },
       include: [{
         model: Documents,
       }],

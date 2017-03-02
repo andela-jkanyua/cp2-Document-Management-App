@@ -1,10 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
-  const Role = sequelize.define('Role', {
+  const Role = sequelize.define('Role', 
+  {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     description: DataTypes.TEXT,
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   }, {
     classMethods: {
       associate: (models) => {

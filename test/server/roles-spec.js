@@ -8,9 +8,6 @@ const usersController = require('../../server/controllers').roles;
 const Users = require('./helpers/users');
 const token = require('./helpers/token');
 
-//During the test the env variable is set to test
-//process.env.NODE_ENV = 'test';
-
 chai.use(chaiHttp);
 //Our parent block
 
@@ -22,6 +19,16 @@ describe('/GET roles', () => {
   before((done) => {
     tokens.user = token.generate(Users[0]);
     done();
+  });
+    it('it only allows Admin user', (done) => {
+      tokens.notAdminUser = token.generate(Users[1])
+      chai.request(server)
+      .get('/roles')
+      .set('x-access-token', tokens.notAdminUser)
+      .end((err, res) => {
+        res.should.have.status(403);
+        done();
+      });
   });
   it('it should GET all the roles', (done) => {
     chai.request(server)
@@ -37,8 +44,11 @@ describe('/GET roles', () => {
     chai.request(server)
     .post(`/roles`)
     .set('x-access-token', tokens.user)
-    .send({title: 'New Role',
-    	description: 'Role description'})
+    .send({
+      title: 'New Role',
+    	description: 'New role description',
+      isAdmin: false,
+    })
     .end((err, res) => {
       res.should.have.status(201);
       res.body.should.be.a('object');

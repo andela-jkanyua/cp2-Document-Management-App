@@ -1,6 +1,6 @@
 module.exports = 
         [{
-        _id: 1,
+        id: 1,
         title: 'Helpful Spouse',
         content: `A man and his wife are having a huge argument when their car is stopped by a police officer.
                   The following  exchange takes place....
@@ -27,7 +27,7 @@ module.exports =
         updatedAt: new Date().toISOString(),
         userId:'1',
       },{
-        _id: 2,
+        id: 2,
         title: 'Top joke in Australia',
         content: `This woman rushed to see her doctor, looking very much worried and all 
                   strung out. She rattles off: “Doctor, take a look at me. When I woke up this morning, 
@@ -41,7 +41,7 @@ module.exports =
         updatedAt: new Date().toISOString(),
         userId:'2',
       },{
-        _id: 3,
+        id: 3,
         title: 'Lorem ipsum dolor sit amet',
         content: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. 
                   Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus
@@ -62,7 +62,7 @@ module.exports =
         updatedAt: new Date().toISOString(),
         userId:'3',
       },{
-        _id: 4,
+        id: 4,
         title: 'Li Europan lingues es membres ',
         content: `At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues 
                   coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. 

@@ -14,7 +14,7 @@ module.exports = {
   },
   list(req, res) {
     return Documents
-    .all()
+    .findAll({where: {access: 'public'}})
     .then(users => res.status(200).send(users))
     .catch(error => res.status(400).send(error));
   },
@@ -22,7 +22,7 @@ module.exports = {
     return Documents
     .findAll({ where: { userId: req.params.userId } })
     .then((document) => {
-      if (!Documents) {
+      if (!document) {
         return res.status(404).send({
           message: 'User has no Documents',
         });

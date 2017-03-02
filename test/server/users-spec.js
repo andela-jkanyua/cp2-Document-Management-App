@@ -17,6 +17,7 @@ describe('Users', () =>{
   const tokens = {};
   before((done) => {
     tokens.user = token.generate(Users[0]);
+    tokens.notAdmin = token.generate(Users[1]);
     done();
   });
 /*
@@ -36,12 +37,34 @@ describe('/GET users', () => {
   });
   it('should GET a specific user', (done) => {
     chai.request(server)
-    .get(`/users/3`)
+    .get(`/users/1`)
     .set('x-access-token', tokens.user)
     .end((err, res) => {
       res.should.have.status(200);
       res.body.should.be.a('object');
       res.body.should.have.property('firstName');
+      done();
+    });
+  });
+  it('allows only user/owner or admin to access user details', (done) => {
+    chai.request(server)
+    .get(`/users/1`)
+    .set('x-access-token', tokens.notAdmin)
+    .end((err, res) => {
+      res.should.have.status(403);
+      res.body.should.be.a('object');
+      res.body.success.should.be.eql(false);
+      done();
+    });
+  });
+  it('allows only user/owner or admin access to documents', (done) => {
+    chai.request(server)
+    .get(`/users/1/documents`)
+    .set('x-access-token', tokens.notAdmin)
+    .end((err, res) => {
+      res.should.have.status(403);
+      res.body.should.be.a('object');
+      res.body.success.should.be.eql(false);
       done();
     });
   });
@@ -53,12 +76,11 @@ describe('/POST users', () => {
   it('should POST a user with all fields', (done) => {
     chai.request(server)
     .post('/users')
-    .set('x-access-token', tokens.user)
     .send(Users[1])
     .end((err, res) => {
       res.should.have.status(201);
       res.body.should.be.a('object');
-      res.body.email.should.be.eql('johndoe@example.com');
+      res.body.success.should.be.eql(true);
       done();
     });
   });
@@ -117,7 +139,7 @@ describe('/POST users', () => {
 describe('DELETE /users/:id', () => {
   it('deletes user', (done) => {
     chai.request(server)
-    .delete(`/users/${Users[0]._id}`)
+    .delete(`/users/${Users[0].id}`)
     .set('x-access-token', tokens.user)
     .end((err, res)=>{
       res.should.have.status(204);
