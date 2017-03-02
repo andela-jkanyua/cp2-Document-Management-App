@@ -14,6 +14,10 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
+      isAdmin: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
