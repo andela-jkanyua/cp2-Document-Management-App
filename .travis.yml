@@ -9,3 +9,4 @@ before_script:
   - psql -c "CREATE USER jimnahmagira;" -U postgres
 env:
 - SECRET=notarealsecret
+- 	NODE_ENV=test
