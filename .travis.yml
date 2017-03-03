@@ -7,3 +7,5 @@ before_script:
   - psql -c 'create database db_development;' -U postgres
   - psql -c 'create database db_test;' -U postgres
   - psql -c 'create database db_production;' -U postgres
+env:
+- SECRET=notarealsecret
