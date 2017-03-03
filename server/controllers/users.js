@@ -1,7 +1,7 @@
 const Users = require('../models').Users;
 const Documents = require('../models').Documents;
 const jwt    = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const secret = process.env.SECRET;
 
