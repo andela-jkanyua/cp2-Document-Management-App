@@ -13,10 +13,10 @@ module.exports = {
     content: {
       type: Sequelize.TEXT,
     },
-    access:{
+    access: {
       type: Sequelize.ENUM,
       values: ['public', 'private'],
-      defaultValue: 'private',   
+      defaultValue: 'private',
     },
     dateCreated: {
       type: Sequelize.DATE,

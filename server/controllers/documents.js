@@ -1,6 +1,6 @@
 const Documents = require('../models').Documents;
 
-module.exports = {
+class Document {
   create(req, res) {
     return Documents
       .create({
@@ -8,16 +8,17 @@ module.exports = {
         content: req.body.content,
         dateCreated: req.body.dateCreated,
         userId: req.body.userId,
+        access: req.body.access,
       })
       .then(documents => res.status(201).send(documents))
       .catch(error => res.status(400).send(error));
-  },
+  }
   list(req, res) {
     return Documents
     .findAll({where: {access: 'public'}})
     .then(users => res.status(200).send(users))
     .catch(error => res.status(400).send(error));
-  },
+  }
   retrieveUserDocuments(req, res) {
     return Documents
     .findAll({ where: { userId: req.params.userId } })
@@ -30,7 +31,7 @@ module.exports = {
       return res.status(200).send(document);
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
   retrieve(req, res) {
     return Documents
     .findById(req.params.docId)
@@ -43,7 +44,7 @@ module.exports = {
       return res.status(200).send(doc);
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
   update(req, res) {
     return Documents
     .findById(req.params.docId)
@@ -58,25 +59,29 @@ module.exports = {
           title: req.body.title || doc.title,
           content: req.body.content || doc.content,
           dateCreated: req.body.dateCreated || doc.dateCreated,
+          access: req.body.access || doc.access,
         })
         .then(() => res.status(200).send(doc))  // Send back the updated document.
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
   destroy(req, res) {
     return Documents
     .findById(req.params.docId)
     .then((doc) => {
       if (!doc) {
         return res.status(400).send({
-          message: 'Document Not Found',
+          message: 'User Not Found',
         });
       }
-      return res.status(204).send(doc);
+      return doc
+        .destroy()
+        .then(() => res.status(204).send(doc))
+        .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
   findAll(req, res) {
     return Documents
     .findAll({
@@ -100,5 +105,6 @@ module.exports = {
       return res.status(200).send(document);
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
 };
+exports.Document = Document;

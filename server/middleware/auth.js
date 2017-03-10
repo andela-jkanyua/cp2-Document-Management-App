@@ -1,38 +1,39 @@
-const express = require('express');
-const jwt    = require('jsonwebtoken');
-const secret = process.env.SECRET
+const jwt = require('jsonwebtoken');
+
+const secret = process.env.SECRET;
 
 // route to authenticate a user (POST http://localhost:env.PORT/login
 
 module.exports = (app) => {
 // route middleware to verify a token
-  app.use(function(req, res, next) {
-
+  app.use((req, res, next) => {
   // check header or url parameters or post parameters for token
-  const token = req.body.token || req.query.token || req.headers['x-access-token'];
-
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
   // decode token
-  if (token) {
-
+    if (token) {
     // verifies secret and checks exp
-    jwt.verify(token, secret, function(err, decoded) {      
-      if (err) {
-        return res.status(401).json({ success: false, message: 'Failed to authenticate token.' });    
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;    
+      jwt.verify(token, secret, (err, decoded) => {
+
+        if (err) {
+          return res
+          .status(401)
+          .json({
+           success: false, message: 'Failed to authenticate token.' });
+        }
+
+        // Check if token is valid
+
+
+        req.decoded = decoded;
         next();
-      }
-    });
-
-  } else {
-
-    // if there is no token
-    // return an error
-    return res.status(403).send({
-      success: false, 
-      message: 'No token provided.' 
-    });
-  }
-});
-}
+      });
+    } else {
+      // if there is no token
+      // return an error
+      return res.status(403).send({
+        success: false,
+        message: 'No token provided.',
+      });
+    }
+  });
+};

@@ -6,7 +6,7 @@ module.exports = {
         password: 'password',
         firstName: 'John',
         lastName: 'Doe',
-        roleId: '1',
+        roleId: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }, {
@@ -14,7 +14,7 @@ module.exports = {
         password: 'password',
         firstName: 'Jane',
         lastName: 'Doe',
-        roleId: '2',
+        roleId: 2,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }, {
@@ -22,7 +22,7 @@ module.exports = {
         password: 'eric123',
         firstName: 'Eric',
         lastName: 'Marsal',
-        roleId: '2',
+        roleId: 2,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }, {
@@ -30,7 +30,7 @@ module.exports = {
         password: 'jake123',
         firstName: 'Jake',
         lastName: 'Chudnow',
-        roleId: '1',
+        roleId: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }, {
@@ -38,7 +38,7 @@ module.exports = {
         password: 'saymyname',
         firstName: 'Werner',
         lastName: 'Heisenberg',
-        roleId: '1',
+        roleId: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },

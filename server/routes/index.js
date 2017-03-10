@@ -1,39 +1,41 @@
-const usersController = require('../controllers').users;
-const documentsController = require('../controllers').documents;
-const rolesController = require('../controllers').roles;
+const {Users, Documents, Roles} = require('../controllers');
+
+
 // API ROUTE =================;
 module.exports = (app) => {
-  app.get('/', (req, res) => res.status(200).send({
-    message: 'Welcome to the DMA API!',
-  }));
 
-  //AUTHENTICATION
-  app.post('/login', usersController.login);
-  app.post('/users', usersController.create); 
+  // AUTHENTICATION
+  app.post('/login', Users.login);
+  app.post('/users', Users.create);
 
   require('../middleware/auth')(app);
 
 
   // USERS ENDPOINTS =================;
   require('../middleware/users')(app);
-  app.get('/users', usersController.list);
-  app.get('/users/:userId', usersController.retrieve);
-  app.put('/users/:userId', usersController.update);
-  app.delete('/users/:userId', usersController.destroy);
+  app.get('/users', Users.list);
+  app.get('/users/:userId', Users.retrieve);
+  app.put('/users/:userId', Users.update);
+  app.delete('/users/:userId', Users.destroy);
 
 
   // DOCUMENTS ENDPOINTS ==============;
   require('../middleware/documents')(app);
-  app.post('/documents', documentsController.create);
-  app.get('/documents', documentsController.list); //public docs only
-  app.get('/documents/:docId', documentsController.retrieve); //owner and admins only
-  app.put('/documents/:docId', documentsController.update); // owner only
-  app.delete('/documents/:docId', documentsController.destroy);// owner only
-  app.get('/users/:userId/documents', documentsController.retrieveUserDocuments);// owner or admin only
-  app.post('/search/documents', documentsController.findAll);
+  app.post('/documents', Documents.create);
+  app.get('/documents', Documents.list); // public docs only
+  app.get('/documents/:docId', Documents.retrieve); // owner and admins only
+  app.put('/documents/:docId', Documents.update); // owner only
+  app.delete('/documents/:docId', Documents.destroy); // owner only
+  app.get('/users/:userId/documents', Documents.retrieveUserDocuments); // owner or admin only
+  app.post('/search/documents', Documents.findAll);
 
   // ROUTES ENDPOINTS ==============;
-  require('../middleware/roles')(app); 
-  app.post('/roles', rolesController.create);
-  app.get('/roles', rolesController.list);
+  require('../middleware/roles')(app);
+  app.post('/roles', Roles.create);
+  app.get('/roles', Roles.list);
+  app.get('*', (req, res) => res.status(200).send({
+
+    //TODO: REDIRECT TO PUBLIC INDEX.HTML
+    message: 'Welcome to the DMA API!',
+  }));
 };

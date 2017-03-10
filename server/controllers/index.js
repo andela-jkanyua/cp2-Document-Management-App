@@ -1,11 +1,13 @@
-const users = require('./users');
+const DocumentsController = require('./documents').Document;
+const UsersController = require('./users').User;
+const RolesController = require('./roles').Role;
 
-const documents = require('./documents');
-
-const roles = require('./roles');
+const Documents = new DocumentsController;
+const Users = new UsersController;
+const Roles = new RolesController;
 
 module.exports = {
-  users,
-  documents,
-  roles,
+  Users,
+  Documents,
+  Roles,
 };

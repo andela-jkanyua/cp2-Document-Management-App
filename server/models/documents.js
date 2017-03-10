@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     content: DataTypes.TEXT,
-    access:{
+    access: {
       type: DataTypes.ENUM,
       values: ['public', 'private'],
       defaultValue: 'private',

@@ -1,14 +1,18 @@
 const Users = require('../models').Users;
+
 const Documents = require('../models').Documents;
-const jwt    = require('jsonwebtoken');
+
+const jwt = require('jsonwebtoken');
+
 const bcrypt = require('bcryptjs');
+
 const saltRounds = 10;
 const secret = process.env.SECRET;
 
-module.exports = {
+class User {
   login(req, res) {
-    if(!(req.body.email && req.body.password)){
-      return res.status(400).json({success: false, message: 'User Email and Password required.'})
+    if (!(req.body.email && req.body.password)) {
+      return res.status(400).json({ success: false, message: 'User Email and Password required.' });
     }
     Users.find({ where: { email: req.body.email } })
     .then((user) => {
@@ -17,25 +21,25 @@ module.exports = {
           success: false,
           message: 'User Not Found',
         });
-      } else if (user){
-        bcrypt.compare(req.body.password, user.password, function(err, auth) {
-          if (!auth){
-            res.status(401).json({success:false, message: 'Authentication Failed. Wrong Password'});
+      } else if (user) {
+        bcrypt.compare(req.body.password, user.password, (err, auth) => {
+          if (!auth) {
+            res.status(401).json({ success: false, message: 'Authentication Failed. Wrong Password' });
           } else {
-            const token = jwt.sign({user: user}, secret, 
-            {
-            expiresIn : '24h'
-          });
-            return res.json({success: true, message: 'Authenticated', token: token});
+            const token = jwt.sign({user: {id: user.id, email: user.email, roleId: user.roleId } }, secret,
+              {
+                expiresIn: '24h',
+              });
+            return res.json({ success: true, message: 'Authenticated', token });
           }
         });
       }
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
   create(req, res) {
-    bcrypt.genSalt(saltRounds, function(err, salt) {
-      bcrypt.hash(req.body.password, salt, function(err, hash) {
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+      bcrypt.hash(req.body.password, salt, (err, hash) => {
         Users.create({
           email: req.body.email,
           password: hash,
@@ -43,29 +47,29 @@ module.exports = {
           lastName: req.body.lastName,
           roleId: req.body.roleId,
         })
-      .then(user => res.status(201).send({message:`User email:, ${user.email} Created!`, success: true}))
+      .then(user => res.status(201).send({ message: ` User email:, ${user.email} Created!`, success: true }))
       .catch(error => res.status(400).send(error));
+      });
     });
-    });
-  },
+  }
   list(req, res) {
     return Users
     .all(
-    {
-      attributes: {
-        exclude: ['password', 'createdAt', 'updatedAt']
-      }
-    })
+      {
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
+      })
     .then(users => res.status(200).send(users))
     .catch(error => res.status(400).send(error));
-  },
+  }
   retrieve(req, res) {
     return Users
     .findById(req.params.userId, {
-      
-        attributes: {
-          exclude: ['password', 'createdAt', 'updatedAt']
-    
+
+      attributes: {
+        exclude: ['password', 'createdAt', 'updatedAt'],
+
       },
       include: [{
         model: Documents,
@@ -80,7 +84,7 @@ module.exports = {
       return res.status(200).send(user);
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
   update(req, res) {
     return Users
     .findById(req.params.userId)
@@ -102,7 +106,7 @@ module.exports = {
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
   destroy(req, res) {
     return Users
     .findById(req.params.userId)
@@ -118,5 +122,6 @@ module.exports = {
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
-  },
+  }
 };
+exports.User = User; 
