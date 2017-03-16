@@ -17,11 +17,10 @@ module.exports = (app) => {
     Documents.findById(parseInt(req.params.docId, 10))
     .then((doc) => {
       if(!doc){
-        return res.status(403).send({success: false, message: 'No such Document'})
+        return res.status(403).send({success: false, message: 'No such Document'});
       }
       Role.findById(req.decoded.user.roleId)
       .then((role) => {
-        console.log(role.isAdmin)
         if (parseInt(req.decoded.user.id, 10) === parseInt(doc.userId, 10) || role.isAdmin ) {
           next();
         } else {

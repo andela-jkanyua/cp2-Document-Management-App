@@ -43,6 +43,30 @@ describe('Users', () => {
         done();
       });
     });
+    it('allows pagination for users.', (done) => {
+      chai.request(server)
+      .get('/users?limit=2&offset=3')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.length.should.be.eql(2);
+        (res.body[0].id).should.be.eql(4);
+        (res.body[1].id).should.be.eql(5);
+        should.not.exist(res.body[2]);
+        done();
+      });
+    });
+    it('ensures Limit and Offset are integers', (done) => {
+      chai.request(server)
+      .get('/users?limit=notInt&offset=notInt')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.success.should.be.eql(false);
+        res.body.message.should.be.eql('Query Parameters are not Integers.');
+        done();
+      });
+    });
     it('allows only user/owner or admin to access user details', (done) => {
       chai.request(server)
       .get('/users/1')
@@ -62,6 +86,28 @@ describe('Users', () => {
         res.should.have.status(403);
         res.body.should.be.a('object');
         res.body.success.should.be.eql(false);
+        done();
+      });
+    });
+    it('should search a user by username', (done) => {
+      chai.request(server)
+      .get('/search/users/?q=JaneD')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body[0].email).to.contain('janedoe@example.com');
+        done();
+      });
+    });
+    it('should return appropriate message if username not found', (done) => {
+      chai.request(server)
+      .get('/search/users/?q=usernoexist')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(404);
+        expect(res.body).to.be.an('object');
+        expect(res.body.message).to.eql('No Users Found.');
         done();
       });
     });

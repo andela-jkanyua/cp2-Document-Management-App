@@ -31,13 +31,6 @@ module.exports = {
     },
     userId: {
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
-      allowNull: false,
-      references: {
-        model: 'Users',
-        key: 'id',
-        as: 'userId',
-      },
     },
   }),
   down: queryInterface => queryInterface.dropTable('Documents'),

@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    username: {
+      type: DataTypes.STRING,
+    },
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
   }, {
@@ -22,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         });
         Users.belongsTo(models.Role, {
           foreignKey: 'roleId',
+          onDelete: 'CASCADE'
         });
       },
     },

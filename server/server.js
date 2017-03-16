@@ -1,32 +1,47 @@
-// server.js
-
-// set up ========================
 require('dotenv').config();
+import express from 'express';
+import webpack from 'webpack';
+import path from 'path';
+import config from '../webpack.config.dev';
+import open from 'open';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
 
-const express = require('express');
+/* eslint-disable no-console */
 
+const port = process.env.PORT || 5000;
 const app = express();
+const compiler = webpack(config);
 
-const morgan = require('morgan');
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ extended: 'true' }));
+app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
-const bodyParser = require('body-parser');
+app.use(require('webpack-dev-middleware')(compiler, {
+  noInfo: true,
+  publicPath: config.output.publicPath
+}));
 
-// Initialization 
+app.use(require('webpack-hot-middleware')(compiler));
 
-// Configuration =================;
 
-app.use(express.static(`${__dirname}/public`));  // set the static files location /public/img will be /img for users
-app.use(morgan('dev'));  // log every request to the console
-app.use(bodyParser.urlencoded({ extended: 'true' }));    // parse application/x-www-form-urlencoded
-app.use(bodyParser.json());  // parse application/json
-app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
-
-// routes ======================================================================
+app.get('/', function(req, res) {
+  res.sendFile(path.join( __dirname, '../client/src/index.html'));
+});
 
 require('./routes/index')(app);
-// api ---------------------------------------------------------------------
 
-// listen port 5000 on localhost(start app with node server.js) =======
-app.listen(process.env.PORT || 5000);
-console.log(`Server on port ${process.env.PORT || 5000}`)
+app.get('*', function(req, res) {
+  res.sendFile(path.join( __dirname, '../client/src/index.html'));
+});
+
+app.listen(port, function(err) {
+  if (err) {
+    console.log(err);
+  }
+  else {
+    open(`http://localhost:${port}`);
+  }
+});
 module.exports = app;

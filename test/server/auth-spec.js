@@ -3,16 +3,17 @@ const expect = require('chai').expect;
 const server = require('../../server/server');
 const chaiHttp = require('chai-http');
 const Users = require('./helpers/users');
-
+const token = require('./helpers/token');
 chai.use(chaiHttp);
 
-describe('Login API endpoint', () => {
+describe('Auth API endpoint', () => {
   // Create a user to use in auth test
   before((done) => {
     chai.request(server)
       .post('/users')
       .send(Users[2])
       .end((err, res) => {
+        console.log(err);
         done();
       });
   });
@@ -92,6 +93,23 @@ describe('Login API endpoint', () => {
         expect(res.status).to.equal(401);
         res.body.success.should.be.eql(false);
         res.body.message.should.be.equal('Failed to authenticate token.');
+        done();
+      });
+    });
+  });
+  describe('POST /login', () => {
+    const tokens = {};
+    before((done) => {
+      tokens.user = token.generate(Users[0]);
+      done();
+    });
+    it('logs out a user', (done) => {
+      chai.request(server)
+      .post('/logout')
+      .send({})
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        expect(res.status).to.equal(204);
         done();
       });
     });

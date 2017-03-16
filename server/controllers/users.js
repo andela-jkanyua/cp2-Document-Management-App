@@ -53,38 +53,47 @@ class User {
     });
   }
   list(req, res) {
-    return Users
-    .all(
-      {
+    if (!(req.query.limit && req.query.offset)) {
+      return Users
+      .all(
+        {
+          attributes: {
+            exclude: ['password', 'createdAt', 'updatedAt'],
+          },
+        })
+      .then(users => res.status(200).send(users))
+      .catch(error => res.status(400).send(error));
+    } else {
+      if(isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))){
+        return res.status(400).send({success: false, message: 'Query Parameters are not Integers.'})
+      }
+      Users.findAll({ offset: req.query.offset, limit: req.query.limit })
+      .then( usr => res.status(200).send(usr))
+      .catch(error => res.status(400).send(error));
+    }
+  }
+  retrieve(req, res) {
+      return Users
+      .findById(req.params.userId, {
+
         attributes: {
           exclude: ['password', 'createdAt', 'updatedAt'],
         },
+        include: [{
+          model: Documents,
+        }],
       })
-    .then(users => res.status(200).send(users))
-    .catch(error => res.status(400).send(error));
-  }
-  retrieve(req, res) {
-    return Users
-    .findById(req.params.userId, {
+      .then((user) => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'User Not Found',
+          });
+        }
+        return res.status(200).send(user);
+      })
+      .catch(error => res.status(400).send(error));
+    }
 
-      attributes: {
-        exclude: ['password', 'createdAt', 'updatedAt'],
-
-      },
-      include: [{
-        model: Documents,
-      }],
-    })
-    .then((user) => {
-      if (!user) {
-        return res.status(404).send({
-          message: 'User Not Found',
-        });
-      }
-      return res.status(200).send(user);
-    })
-    .catch(error => res.status(400).send(error));
-  }
   update(req, res) {
     return Users
     .findById(req.params.userId)
@@ -123,5 +132,32 @@ class User {
     })
     .catch(error => res.status(400).send(error));
   }
+  findAll(req, res) {
+    return Users
+    .findAll({
+      where: {
+        $or: [
+          {
+            username: { $iLike: `%${req.query.q}%` },
+          },
+        ],
+      },
+    })
+    .then((user) => {
+      if (user.length<1) {
+        return res.status(404).send({
+          message: 'No Users Found.',
+        });
+      }
+      return res.status(200).send(user);
+    })
+    .catch(error => res.status(400).send(error));
+  }
+  logout(req, res) {
+    req.headers['x-access-token'] = null
+    req.decoded = null;
+    res.status(204).send({message: 'User logged out.'})
+    console.log('User logged out. Delete session storage!')
+  }
 };
-exports.User = User; 
+exports.User = User;

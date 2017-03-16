@@ -14,10 +14,20 @@ class Document {
       .catch(error => res.status(400).send(error));
   }
   list(req, res) {
-    return Documents
-    .findAll({where: {access: 'public'}})
-    .then(users => res.status(200).send(users))
-    .catch(error => res.status(400).send(error));
+    if (!(req.query.limit && req.query.offset)) {
+      return Documents
+      .findAll({where: {access: 'public'}})
+      .then(users => res.status(200).send(users))
+      .catch(error => res.status(400).send(error));
+    } else {
+      console.log(typeof(req.query.limit));
+      if(isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))){
+        return res.status(400).send({success: false, message: 'Query Parameters are not Integers.'})
+      }
+      Documents.findAll({ offset: req.query.offset, limit: req.query.limit })
+      .then( usr => res.status(200).send(usr))
+      .catch(error => res.status(400).send(error));
+    }
   }
   retrieveUserDocuments(req, res) {
     return Documents
@@ -88,18 +98,18 @@ class Document {
       where: {
         $or: [
           {
-            title: { $iLike: `%${req.body.search}%` },
+            title: { $iLike: `%${req.query.q}%` },
           },
           {
-            content: { $iLike: `%${req.body.search}%` },
+            content: { $iLike: `%${req.query.q}%` },
           },
         ],
       },
     })
     .then((document) => {
-      if (!Documents) {
+      if (document.length<1) {
         return res.status(404).send({
-          message: 'No Documents',
+          message: 'No Documents found.',
         });
       }
       return res.status(200).send(document);

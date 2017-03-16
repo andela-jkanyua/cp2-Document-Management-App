@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: function (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Documents',
       [{
         title: 'Helpful Spouse',
@@ -16,6 +16,7 @@ module.exports = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 2,
+        access: 'private',
       }, {
         title: 'Lorem ipsum dolor sit amet',
         content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula ....',
@@ -23,14 +24,7 @@ module.exports = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 3,
-      }, {
-        title: 'Li Europan lingues es membres ',
-        content: 'At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun ...',
-        dateCreated: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        userId: 3,
-
+        access: 'public',
       }, {
         title: 'Li Europan lingues es membres ',
         content: 'At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun ...',
@@ -38,7 +32,7 @@ module.exports = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 4,
-
+        access: 'private',
       }, {
         title: 'Li Europan lingues es membres ',
         content: 'At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles....',
@@ -46,11 +40,12 @@ module.exports = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 5,
+        access: 'public',
       },
       ], {});
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: function (queryInterface, Sequelize) {
     return queryInterface.bulkDelete('Documents', null, {});
   },
 };

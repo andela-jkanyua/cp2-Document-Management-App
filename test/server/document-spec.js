@@ -50,6 +50,62 @@ describe('Documents', () => {
           done();
         });
     });
+    it('allows pagination for users.', (done) => {
+      chai.request(server)
+      .get('/documents?limit=2&offset=3')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        // Please note that we delete some documents in describe DELETE
+        res.should.have.status(200);
+        res.body.length.should.be.eql(2);
+        should.not.exist(res.body[2]);
+        done();
+      });
+    });
+    it('ensures Limit and Offset are integers', (done) => {
+      chai.request(server)
+      .get('/documents?limit=notInt&offset=notInt')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.success.should.be.eql(false);
+        res.body.message.should.be.eql('Query Parameters are not Integers.');
+        done();
+      });
+    });
+    it('should search documents title for a term', (done) => {
+      chai.request(server)
+      .get('/search/documents/?q=Lorem')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body[0].title).to.contain('Lorem ipsum dolor sit amet');
+        done();
+      });
+    });
+    it('should search documents content for a term', (done) => {
+      chai.request(server)
+      .get('/search/documents/?q=solmen')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body[0].title).to.contain('Li Europan lingues es membres');
+        done();
+      });
+    });
+    it('should return appropriate message if username not found', (done) => {
+      chai.request(server)
+      .get('/search/documents/?q=documentrnoexist')
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(404);
+        expect(res.body).to.be.an('object');
+        expect(res.body.message).to.eql('No Documents found.');
+        done();
+      });
+    });
   });
   describe('/POST documents', () => {
     it('should POST a document with all fields', (done) => {
@@ -72,18 +128,6 @@ describe('Documents', () => {
         .end((err, res) => {
           res.should.have.status(400);
           expect(res.body.name).to.contain('SequelizeValidationError');
-          done();
-        });
-    });
-    it('should search documents for a term', (done) => {
-      chai.request(server)
-        .post('/search/documents')
-        .set('x-access-token', tokens.user)
-        .send({ search: 'Lorem' })
-        .end((err, res) => {
-          res.should.have.status(200);
-          expect(res.body).to.be.an('array');
-          expect(res.body[0].title).to.contain('Lorem ipsum dolor sit amet');
           done();
         });
     });
@@ -113,7 +157,7 @@ describe('Documents', () => {
           done();
         });
       });
-    )};
+    });
   describe('/DELETE documents/:id', () => {
     it('deletes document', (done) => {
       chai.request(server)

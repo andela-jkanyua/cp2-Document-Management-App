@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: function (queryInterface, Sequelize) {
     queryInterface.bulkInsert('Roles', [{
       title: 'admin',
       description: 'Administrator',
@@ -17,7 +17,7 @@ module.exports = {
     ], {});
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: function (queryInterface, Sequelize) {
     queryInterface.bulkDelete('Roles', null, {});
   },
 };

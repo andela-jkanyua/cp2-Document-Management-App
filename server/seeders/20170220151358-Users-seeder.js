@@ -1,9 +1,10 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: function (queryInterface, Sequelize) {
     queryInterface.bulkInsert('Users',
       [{
         email: 'johndoe@example.com',
         password: 'password',
+        username: 'JohnD',
         firstName: 'John',
         lastName: 'Doe',
         roleId: 1,
@@ -12,6 +13,7 @@ module.exports = {
       }, {
         email: 'janedoe@example.com',
         password: 'password',
+        username: 'JaneD',
         firstName: 'Jane',
         lastName: 'Doe',
         roleId: 2,
@@ -20,6 +22,7 @@ module.exports = {
       }, {
         email: 'ericmarshal@example.com',
         password: 'eric123',
+        username: 'EricM',
         firstName: 'Eric',
         lastName: 'Marsal',
         roleId: 2,
@@ -28,6 +31,7 @@ module.exports = {
       }, {
         email: 'jakechudnow@music.com',
         password: 'jake123',
+        username: 'JakeC',
         firstName: 'Jake',
         lastName: 'Chudnow',
         roleId: 1,
@@ -36,6 +40,7 @@ module.exports = {
       }, {
         email: 'werner.heisenberg@chem.com',
         password: 'saymyname',
+        username: 'WalterW',
         firstName: 'Werner',
         lastName: 'Heisenberg',
         roleId: 1,
@@ -44,7 +49,7 @@ module.exports = {
       },
       ], {});
   },
-  down: (queryInterface, Sequelize) => {
-    queryInterface.bulkDelete('Users', null, {});
+  down: function (queryInterface, Sequelize) {
+    return queryInterface.bulkDelete('Users', null, {});
   },
 };

@@ -6,6 +6,8 @@ module.exports = (app) => {
 
   // AUTHENTICATION
   app.post('/login', Users.login);
+  //  Using a POST not GET because browsers will pre-fetch pages they "think" you will visit next.
+  app.post('/logout', Users.logout);
   app.post('/users', Users.create);
 
   require('../middleware/auth')(app);
@@ -14,6 +16,7 @@ module.exports = (app) => {
   // USERS ENDPOINTS =================;
   require('../middleware/users')(app);
   app.get('/users', Users.list);
+  app.get('/search/users', Users.findAll);
   app.get('/users/:userId', Users.retrieve);
   app.put('/users/:userId', Users.update);
   app.delete('/users/:userId', Users.destroy);
@@ -27,15 +30,11 @@ module.exports = (app) => {
   app.put('/documents/:docId', Documents.update); // owner only
   app.delete('/documents/:docId', Documents.destroy); // owner only
   app.get('/users/:userId/documents', Documents.retrieveUserDocuments); // owner or admin only
-  app.post('/search/documents', Documents.findAll);
+  app.get('/search/documents', Documents.findAll);
 
   // ROUTES ENDPOINTS ==============;
   require('../middleware/roles')(app);
   app.post('/roles', Roles.create);
   app.get('/roles', Roles.list);
-  app.get('*', (req, res) => res.status(200).send({
 
-    //TODO: REDIRECT TO PUBLIC INDEX.HTML
-    message: 'Welcome to the DMA API!',
-  }));
 };

@@ -16,6 +16,9 @@ module.exports = {
         },
         unique: true,
       },
+      username: {
+        type: Sequelize.STRING,
+      },
       password: {
         allowNull: false,
         type: Sequelize.STRING,
@@ -36,12 +39,6 @@ module.exports = {
       },
       roleId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Roles',
-          key: 'id',
-          as: 'roleId',
-        },
       },
     }),
   down: queryInterface => queryInterface.dropTable('Users'),

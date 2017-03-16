@@ -2,13 +2,15 @@ const jwt = require('jsonwebtoken');
 
 const secret = process.env.SECRET;
 
+import path from 'path';
+
 // route to authenticate a user (POST http://localhost:env.PORT/login
 
 module.exports = (app) => {
 // route middleware to verify a token
   app.use((req, res, next) => {
   // check header or url parameters or post parameters for token
-    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const token = req.headers['x-access-token'];
   // decode token
     if (token) {
     // verifies secret and checks exp
@@ -30,10 +32,11 @@ module.exports = (app) => {
     } else {
       // if there is no token
       // return an error
-      return res.status(403).send({
-        success: false,
-        message: 'No token provided.',
-      });
+      // return res.status(403).send({
+      //   success: false,
+      //   message: 'No token provided.',
+      // });
+      res.sendFile(path.join( __dirname, '../../client/src/index.html'));
     }
   });
 };

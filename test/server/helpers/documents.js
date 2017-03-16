@@ -6,6 +6,7 @@ module.exports =
   dateCreated: new Date().toISOString(),
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
+  access: 'private',
   userId: '1',
 }, {
   id: 2,
@@ -15,6 +16,7 @@ module.exports =
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   userId: '2',
+  access: 'public',
 }, {
   id: 3,
   title: 'Lorem ipsum dolor sit amet',
@@ -23,6 +25,7 @@ module.exports =
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   userId: '3',
+  access: 'private',
 }, {
   id: 4,
   title: 'Li Europan lingues es membres ',
@@ -31,4 +34,5 @@ module.exports =
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   userId: '3',
+  access: 'public',
 }];
