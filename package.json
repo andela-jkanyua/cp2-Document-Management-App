@@ -8,11 +8,12 @@
   },
   "scripts": {
     "prestart": "babel-node ./server/startMessage",
-    "start": "babel-node ./server/server.js --exec babel-node --presets es2015",
+    "start": "nodemon ./server/server.js --exec babel-node --presets es2015",
     "lint": "node_modules/.bin/esw webpack.config.* client server",
     "lint:watch": "npm run lint -- --watch",
     "test-server": "NODE_ENV=test && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && mocha --timeout 20000 --require babel-register \"test/server/**/*.js\"",
-    "test-client": "mocha --reporter progress test/client/setup.js \"test/client/**/*.js\""
+    "test-client": "mocha --reporter progress test/client/setup.js \"test/client/**/*.js\"",
+    "test":"npm-run-all --parallel test-client test-server"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
   "dependencies": {
     "babel-polyfill": "6.8.0",
     "bcryptjs": "^2.4.3",
+    "blueimp-md5": "^2.7.0",
     "body-parser": "^1.16.1",
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
@@ -45,14 +47,16 @@
     "pg-hstore": "^2.3.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-gravatar": "^2.6.1",
     "react-mdl": "^1.7.2",
     "react-redux": "4.4.5",
-    "react-router": "2.4.0",
-    "react-router-redux": "4.0.4",
+    "react-router": "3.0.0",
+    "react-router-redux": "4.0.7",
     "react-tap-event-plugin": "^2.0.1",
-    "redux": "3.5.2",
-    "redux-thunk": "2.0.1",
+    "redux": "3.6.0",
+    "redux-thunk": "^2.0.1",
     "sequelize": "^3.30.2",
+    "superagent": "^3.5.0",
     "toastr": "^2.1.2"
   },
   "devDependencies": {
