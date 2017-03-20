@@ -1,4 +1,5 @@
 const Documents = require('../models').Documents;
+const Users = require('../models').Users;
 
 class Document {
   create(req, res) {
@@ -16,15 +17,27 @@ class Document {
   list(req, res) {
     if (!(req.query.limit && req.query.offset)) {
       return Documents
-      .findAll({where: {access: 'public'}})
+      .findAll({where: {access: 'public'},
+      include: [{
+        model: Users,
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],},
+        }],
+      })
       .then(users => res.status(200).send(users))
       .catch(error => res.status(400).send(error));
     } else {
-      console.log(typeof(req.query.limit));
-      if(isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))){
-        return res.status(400).send({success: false, message: 'Query Parameters are not Integers.'})
+      if(isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))) {
+        return res.status(400).send({success: false, message: 'Query Parameters are not Integers.'});
       }
-      Documents.findAll({ offset: req.query.offset, limit: req.query.limit })
+      Documents.findAll({where: {access: 'public'},
+      include: [{
+        model: Users,
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
+      }],
+      offset: req.query.offset, limit: req.query.limit})
       .then( usr => res.status(200).send(usr))
       .catch(error => res.status(400).send(error));
     }
@@ -116,5 +129,5 @@ class Document {
     })
     .catch(error => res.status(400).send(error));
   }
-};
+}
 exports.Document = Document;

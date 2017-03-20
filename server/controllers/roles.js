@@ -17,5 +17,5 @@ class Role {
     .then(role => res.status(200).send(role))
     .catch(error => res.status(400).send(error));
   }
-};
-exports.Role = Role; 
+}
+exports.Role = Role;

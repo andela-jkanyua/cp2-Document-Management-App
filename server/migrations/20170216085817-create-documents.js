@@ -18,9 +18,6 @@ module.exports = {
       values: ['public', 'private'],
       defaultValue: 'private',
     },
-    dateCreated: {
-      type: Sequelize.DATE,
-    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

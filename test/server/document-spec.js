@@ -52,12 +52,13 @@ describe('Documents', () => {
     });
     it('allows pagination for users.', (done) => {
       chai.request(server)
-      .get('/documents?limit=2&offset=3')
+      .get('/documents?limit=1&offset=1')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         // Please note that we delete some documents in describe DELETE
         res.should.have.status(200);
-        res.body.length.should.be.eql(2);
+        console.log(res.body)
+        res.body.length.should.be.eql(1);
         should.not.exist(res.body[2]);
         done();
       });

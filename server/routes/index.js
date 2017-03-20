@@ -9,7 +9,7 @@ module.exports = (app) => {
   //  Using a POST not GET because browsers will pre-fetch pages they "think" you will visit next.
   app.post('/logout', Users.logout);
   app.post('/users', Users.create);
-
+  app.get('/documents', Documents.list); // public docs only
   require('../middleware/auth')(app);
 
 
@@ -25,7 +25,6 @@ module.exports = (app) => {
   // DOCUMENTS ENDPOINTS ==============;
   require('../middleware/documents')(app);
   app.post('/documents', Documents.create);
-  app.get('/documents', Documents.list); // public docs only
   app.get('/documents/:docId', Documents.retrieve); // owner and admins only
   app.put('/documents/:docId', Documents.update); // owner only
   app.delete('/documents/:docId', Documents.destroy); // owner only

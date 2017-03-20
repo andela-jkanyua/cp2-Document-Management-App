@@ -32,11 +32,7 @@ module.exports = (app) => {
     } else {
       // if there is no token
       // return an error
-      // return res.status(403).send({
-      //   success: false,
-      //   message: 'No token provided.',
-      // });
-      res.sendFile(path.join( __dirname, '../../client/src/index.html'));
+      return res.status(403).sendFile(path.join( __dirname, '../../client/src/index.html'));
     }
   });
 };

@@ -65,7 +65,7 @@ class User {
       .catch(error => res.status(400).send(error));
     } else {
       if(isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))){
-        return res.status(400).send({success: false, message: 'Query Parameters are not Integers.'})
+        return res.status(400).send({success: false, message: 'Query Parameters are not Integers.'});
       }
       Users.findAll({ offset: req.query.offset, limit: req.query.limit })
       .then( usr => res.status(200).send(usr))
@@ -154,10 +154,9 @@ class User {
     .catch(error => res.status(400).send(error));
   }
   logout(req, res) {
-    req.headers['x-access-token'] = null
+    req.headers['x-access-token'] = null;
     req.decoded = null;
-    res.status(204).send({message: 'User logged out.'})
-    console.log('User logged out. Delete session storage!')
+    res.status(204).send({message: 'User logged out.'});
   }
-};
+}
 exports.User = User;

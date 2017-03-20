@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       values: ['public', 'private'],
       defaultValue: 'private',
     },
-    dateCreated: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
   }, {
     classMethods: {
       associate: (models) => {

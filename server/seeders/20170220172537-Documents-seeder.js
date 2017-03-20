@@ -4,7 +4,6 @@ module.exports = {
       [{
         title: 'Helpful Spouse',
         content: 'A man and his wife are having a huge argument when their car is stopped by a...',
-        dateCreated: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 1,
@@ -12,7 +11,6 @@ module.exports = {
       }, {
         title: 'Top joke in Australia',
         content: 'This woman rushed to see her doctor, looking very much worried and all .... ',
-        dateCreated: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 2,
@@ -20,7 +18,6 @@ module.exports = {
       }, {
         title: 'Lorem ipsum dolor sit amet',
         content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula ....',
-        dateCreated: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 3,
@@ -28,7 +25,6 @@ module.exports = {
       }, {
         title: 'Li Europan lingues es membres ',
         content: 'At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun ...',
-        dateCreated: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 4,
@@ -36,7 +32,6 @@ module.exports = {
       }, {
         title: 'Li Europan lingues es membres ',
         content: 'At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles....',
-        dateCreated: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 5,

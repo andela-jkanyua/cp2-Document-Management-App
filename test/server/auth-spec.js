@@ -79,8 +79,6 @@ describe('Auth API endpoint', () => {
       .send(Users[2])
       .end((err, res) => {
         expect(res.status).to.equal(403);
-        res.body.success.should.be.eql(false);
-        res.body.message.should.be.equal('No token provided.');
         done();
       });
     });
