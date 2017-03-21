@@ -14,12 +14,12 @@ const Header = () => {
       <div className="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
         <Link to="/" className="mdl-layout__tab">Home</Link>
         <Link to="profile" className="mdl-layout__tab">Profile</Link>
-        <Link to="create-document" className="mdl-layout__tab">Documents</Link>
+        <Link to="documents" className="mdl-layout__tab">Documents</Link>
         <Link to="about" className="mdl-layout__tab">About</Link>
         <Link to="github" className="mdl-layout__tab">Github</Link>
         <Link to="faq" className="mdl-layout__tab">FAQ</Link>
       </div>
     </header>
-  )
-}
+  );
+};
 export default Header;
