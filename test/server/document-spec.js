@@ -2,12 +2,12 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../../server/server');
-const should = chai.should();
 const expect = require('chai').expect;
-const documentsController = require('../../server/controllers').documents;
 const Documents = require('./helpers/documents');
 const Users = require('./helpers/users');
 const token = require('./helpers/token');
+
+const should = chai.should();
 
 chai.use(chaiHttp);
 
@@ -18,6 +18,7 @@ describe('Documents', () => {
     tokens.notAdmin = token.generate(Users[1]);
     done();
   });
+
   describe('/GET Documents', () => {
     it('returns an array of all public documents', (done) => {
       chai.request(server)
@@ -29,6 +30,7 @@ describe('Documents', () => {
           done();
         });
     });
+
     it('ensures non-owner cannot GET a document', (done) => {
       chai.request(server)
         .get('/users/1/documents')
@@ -40,6 +42,7 @@ describe('Documents', () => {
           done();
         });
     });
+
     it('ensures owner/admin can GET a specific document', (done) => {
       chai.request(server)
         .get('/users/1/documents')
@@ -50,6 +53,7 @@ describe('Documents', () => {
           done();
         });
     });
+
     it('allows pagination for users.', (done) => {
       chai.request(server)
       .get('/documents?limit=1&offset=1')
@@ -57,12 +61,12 @@ describe('Documents', () => {
       .end((err, res) => {
         // Please note that we delete some documents in describe DELETE
         res.should.have.status(200);
-        console.log(res.body)
         res.body.length.should.be.eql(1);
         should.not.exist(res.body[2]);
         done();
       });
     });
+
     it('ensures Limit and Offset are integers', (done) => {
       chai.request(server)
       .get('/documents?limit=notInt&offset=notInt')
@@ -74,6 +78,7 @@ describe('Documents', () => {
         done();
       });
     });
+
     it('should search documents title for a term', (done) => {
       chai.request(server)
       .get('/search/documents/?q=Lorem')
@@ -85,6 +90,7 @@ describe('Documents', () => {
         done();
       });
     });
+
     it('should search documents content for a term', (done) => {
       chai.request(server)
       .get('/search/documents/?q=solmen')
@@ -96,9 +102,10 @@ describe('Documents', () => {
         done();
       });
     });
-    it('should return appropriate message if username not found', (done) => {
+
+    it('should return appropriate message if document not found', (done) => {
       chai.request(server)
-      .get('/search/documents/?q=documentrnoexist')
+      .get('/search/documents/?q=documentnoexist')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(404);
@@ -108,6 +115,7 @@ describe('Documents', () => {
       });
     });
   });
+
   describe('/POST documents', () => {
     it('should POST a document with all fields', (done) => {
       chai.request(server)
@@ -121,6 +129,7 @@ describe('Documents', () => {
           done();
         });
     });
+
     it('should Not POST a document without a title', (done) => {
       chai.request(server)
         .post('/documents')
@@ -133,7 +142,8 @@ describe('Documents', () => {
         });
     });
   });
-  describe('/DELETE documents/:id', () => {
+
+  describe('/UPDATE documents/:id', () => {
     it('should update a document', (done) => {
       chai.request(server)
         .put('/documents/1')
@@ -145,7 +155,8 @@ describe('Documents', () => {
           res.body.title.should.be.eql('Updated Title');
           done();
         });
-      });
+    });
+
     it('ensures only owner should update a document', (done) => {
       chai.request(server)
         .put('/documents/4')
@@ -157,26 +168,28 @@ describe('Documents', () => {
           expect(res.body.message).to.equal('Only Owner or Admin can modify');
           done();
         });
-      });
     });
+  });
+
   describe('/DELETE documents/:id', () => {
     it('deletes document', (done) => {
       chai.request(server)
-    .delete(`/documents/${Documents[0].id}`)
-    .set('x-access-token', tokens.user)
-    .end((err, res) => {
-      res.should.have.status(204);
-      done();
+      .delete(`/documents/${Documents[0].id}`)
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(204);
+        done();
+      });
     });
-    });
-    it('ensures nonAdmin cannot delete a document', (done) => {
+
+    it('ensures user cannot delete a document created by other user', (done) => {
       chai.request(server)
-    .delete(`/documents/${Documents[3].id}`)
-    .set('x-access-token', tokens.notAdmin)
-    .end((err, res) => {
-      res.should.have.status(403);
-      done();
-    });
+      .delete(`/documents/${Documents[3].id}`)
+      .set('x-access-token', tokens.notAdmin)
+      .end((err, res) => {
+        res.should.have.status(403);
+        done();
+      });
     });
   });
 });

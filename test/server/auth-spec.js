@@ -4,6 +4,7 @@ const server = require('../../server/server');
 const chaiHttp = require('chai-http');
 const Users = require('./helpers/users');
 const token = require('./helpers/token');
+
 chai.use(chaiHttp);
 
 describe('Auth API endpoint', () => {
@@ -12,11 +13,11 @@ describe('Auth API endpoint', () => {
     chai.request(server)
       .post('/users')
       .send(Users[2])
-      .end((err, res) => {
-        console.log(err);
+      .end(() => {
         done();
       });
   });
+
   describe('POST /login', () => {
     it('logs in a user', (done) => {
       chai.request(server)
@@ -28,6 +29,7 @@ describe('Auth API endpoint', () => {
         done();
       });
     });
+
     it('require email and password to be provided', (done) => {
       chai.request(server)
       .post('/login')
@@ -35,10 +37,10 @@ describe('Auth API endpoint', () => {
       .end((err, res) => {
         expect(res.status).to.equal(400);
         res.body.success.should.be.eql(false);
-        res.body.message.should.be.equal('User Email and Password required.');
         done();
       });
     });
+
     it('ensures email matches an existing user', (done) => {
       chai.request(server)
       .post('/login')
@@ -46,10 +48,10 @@ describe('Auth API endpoint', () => {
       .end((err, res) => {
         expect(res.status).to.equal(404);
         res.body.success.should.be.eql(false);
-        res.body.message.should.be.equal('User Not Found');
         done();
       });
     });
+
     it('does not validate wrong password', (done) => {
       chai.request(server)
       .post('/login')
@@ -61,6 +63,7 @@ describe('Auth API endpoint', () => {
         done();
       });
     });
+
     it('returns a token', (done) => {
       chai.request(server)
       .post('/login')
@@ -69,10 +72,10 @@ describe('Auth API endpoint', () => {
         expect(res.status).to.equal(200);
         res.body.success.should.be.eql(true);
         res.body.message.should.be.equal('Authenticated');
-        expect(res.body.token).to.be.defined;
         done();
       });
     });
+
     it('returns error if token not provided', (done) => {
       chai.request(server)
       .post('/documents')
@@ -82,6 +85,7 @@ describe('Auth API endpoint', () => {
         done();
       });
     });
+
     it('returns error if token is invalid', (done) => {
       chai.request(server)
       .post('/documents')
@@ -95,12 +99,13 @@ describe('Auth API endpoint', () => {
       });
     });
   });
-  describe('POST /login', () => {
+  describe('POST /logout', () => {
     const tokens = {};
     before((done) => {
       tokens.user = token.generate(Users[0]);
       done();
     });
+
     it('logs out a user', (done) => {
       chai.request(server)
       .post('/logout')

@@ -32,6 +32,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('should GET a specific user', (done) => {
       chai.request(server)
       .get('/users/1')
@@ -43,6 +44,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('allows pagination for users.', (done) => {
       chai.request(server)
       .get('/users?limit=2&offset=3')
@@ -56,6 +58,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('ensures Limit and Offset are integers', (done) => {
       chai.request(server)
       .get('/users?limit=notInt&offset=notInt')
@@ -67,6 +70,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('allows only user/owner or admin to access user details', (done) => {
       chai.request(server)
       .get('/users/1')
@@ -78,6 +82,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('allows only user/owner or admin access to documents', (done) => {
       chai.request(server)
       .get('/users/1/documents')
@@ -89,6 +94,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('should search a user by username', (done) => {
       chai.request(server)
       .get('/search/users/?q=JaneD')
@@ -100,6 +106,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('should return appropriate message if username not found', (done) => {
       chai.request(server)
       .get('/search/users/?q=usernoexist')
@@ -127,6 +134,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('should NOT POST a user without all fields', (done) => {
       const invalidUser = {
         password: 'password',
@@ -144,6 +152,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('only accepts valid emails', (done) => {
       const invalidEmail = {
         email: 'invalid-email',
@@ -179,6 +188,7 @@ describe('Users', () => {
         done();
       });
     });
+
     it('user can only edit own details', (done) => {
       chai.request(server)
       .put('/users/1')

@@ -1,8 +1,9 @@
+import path from 'path';
+
 const jwt = require('jsonwebtoken');
 
 const secret = process.env.SECRET;
 
-import path from 'path';
 
 // route to authenticate a user (POST http://localhost:env.PORT/login
 
@@ -15,12 +16,11 @@ module.exports = (app) => {
     if (token) {
     // verifies secret and checks exp
       jwt.verify(token, secret, (err, decoded) => {
-
         if (err) {
           return res
           .status(401)
           .json({
-           success: false, message: 'Failed to authenticate token.' });
+            success: false, message: 'Failed to authenticate token.' });
         }
 
         // Check if token is valid
@@ -32,7 +32,7 @@ module.exports = (app) => {
     } else {
       // if there is no token
       // return an error
-      return res.status(403).sendFile(path.join( __dirname, '../../client/src/index.html'));
+      return res.status(403).sendFile(path.join(__dirname, '../../client/src/index.html'));
     }
   });
 };

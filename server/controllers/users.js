@@ -8,9 +8,17 @@ const bcrypt = require('bcryptjs');
 
 const saltRounds = 10;
 const secret = process.env.SECRET;
-
+/**
+ * Represents a User.
+ */
 class User {
-  login(req, res) {
+    /**
+    * Generates a token, logs in a user
+    * @param {Object} req Incoming HTTP request.
+    * @param {Object} res Outgoing HTTP response.
+    * @returns {Object} the created document.
+    */
+  static login(req, res) {
     if (!(req.body.email && req.body.password)) {
       return res.status(400).json({ success: false, message: 'User Email and Password required.' });
     }
@@ -26,18 +34,41 @@ class User {
           if (!auth) {
             res.status(401).json({ success: false, message: 'Authentication Failed. Wrong Password' });
           } else {
-            const token = jwt.sign({user: {id: user.id, email: user.email, roleId: user.roleId } }, secret,
+            const token = jwt.sign(
+              {
+                user: {
+                  id: user.id,
+                  email: user.email,
+                  roleId: user.roleId } },
+                  secret,
               {
                 expiresIn: '24h',
-              });
-            return res.json({ success: true, message: 'Authenticated', token });
+              }
+            );
+            return res.json(
+              { success: true,
+                message: 'Authenticated',
+                token,
+                user:
+                {
+                  id: user.id,
+                  email: user.email
+                }
+              }
+            );
           }
         });
       }
     })
     .catch(error => res.status(400).send(error));
   }
-  create(req, res) {
+  /**
+  * Create a user
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {Object} the created user.
+  */
+  static create(req, res) {
     bcrypt.genSalt(saltRounds, (err, salt) => {
       bcrypt.hash(req.body.password, salt, (err, hash) => {
         Users.create({
@@ -52,7 +83,13 @@ class User {
       });
     });
   }
-  list(req, res) {
+  /**
+  * Lists all Users
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {array} array of user objects.
+  */
+  static list(req, res) {
     if (!(req.query.limit && req.query.offset)) {
       return Users
       .all(
@@ -63,38 +100,47 @@ class User {
         })
       .then(users => res.status(200).send(users))
       .catch(error => res.status(400).send(error));
-    } else {
-      if(isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))){
-        return res.status(400).send({success: false, message: 'Query Parameters are not Integers.'});
-      }
-      Users.findAll({ offset: req.query.offset, limit: req.query.limit })
-      .then( usr => res.status(200).send(usr))
-      .catch(error => res.status(400).send(error));
     }
+    if (isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))) {
+      return res.status(400).send({ success: false, message: 'Query Parameters are not Integers.' });
+    }
+    Users.findAll({ offset: req.query.offset, limit: req.query.limit })
+    .then(usr => res.status(200).send(usr))
+    .catch(error => res.status(400).send(error));
   }
-  retrieve(req, res) {
-      return Users
-      .findById(req.params.userId, {
-
-        attributes: {
-          exclude: ['password', 'createdAt', 'updatedAt'],
-        },
-        include: [{
-          model: Documents,
-        }],
-      })
-      .then((user) => {
-        if (!user) {
-          return res.status(404).send({
-            message: 'User Not Found',
-          });
-        }
-        return res.status(200).send(user);
-      })
-      .catch(error => res.status(400).send(error));
-    }
-
-  update(req, res) {
+  /**
+  * Gets a specific User
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} user object.
+  */
+  static retrieve(req, res) {
+    return Users
+    .findById(req.params.userId, {
+      attributes: {
+        exclude: ['password', 'createdAt', 'updatedAt'],
+      },
+      include: [{
+        model: Documents,
+      }],
+    })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({
+          message: 'User Not Found',
+        });
+      }
+      return res.status(200).send(user);
+    })
+    .catch(error => res.status(400).send(error));
+  }
+  /**
+  * Update a document
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} updated user object.
+  */
+  static update(req, res) {
     return Users
     .findById(req.params.userId)
     .then((user) => {
@@ -116,7 +162,13 @@ class User {
     })
     .catch(error => res.status(400).send(error));
   }
-  destroy(req, res) {
+  /**
+  * Delete a User
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} deleted user object.
+  */
+  static destroy(req, res) {
     return Users
     .findById(req.params.userId)
     .then((user) => {
@@ -132,7 +184,13 @@ class User {
     })
     .catch(error => res.status(400).send(error));
   }
-  findAll(req, res) {
+  /**
+  * Find a user
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} selected user object.
+  */
+  static findAll(req, res) {
     return Users
     .findAll({
       where: {
@@ -144,7 +202,7 @@ class User {
       },
     })
     .then((user) => {
-      if (user.length<1) {
+      if (user.length < 1) {
         return res.status(404).send({
           message: 'No Users Found.',
         });
@@ -153,10 +211,16 @@ class User {
     })
     .catch(error => res.status(400).send(error));
   }
-  logout(req, res) {
+  /**
+  * Logs out a user
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} Object with logout message key.
+  */
+  static logout(req, res) {
     req.headers['x-access-token'] = null;
     req.decoded = null;
-    res.status(204).send({message: 'User logged out.'});
+    res.status(204).send({ message: 'User logged out.' });
   }
 }
 exports.User = User;

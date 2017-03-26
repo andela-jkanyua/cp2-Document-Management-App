@@ -1,8 +1,17 @@
 const Documents = require('../models').Documents;
 const Users = require('../models').Users;
 
+/**
+ * Represents a Document.
+ */
 class Document {
-  create(req, res) {
+  /**
+  * Creates a new Document
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {Object} the created document.
+  */
+  static create(req, res) {
     return Documents
       .create({
         title: req.body.title,
@@ -14,35 +23,50 @@ class Document {
       .then(documents => res.status(201).send(documents))
       .catch(error => res.status(400).send(error));
   }
-  list(req, res) {
+
+  /**
+  * Lists all public documents
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {array} array of document objects.
+  */
+  static list(req, res) {
     if (!(req.query.limit && req.query.offset)) {
       return Documents
-      .findAll({where: {access: 'public'},
-      include: [{
-        model: Users,
-        attributes: {
-          exclude: ['password', 'createdAt', 'updatedAt'],},
+      .findAll({ where: { access: 'public' },
+        include: [{
+          model: Users,
+          attributes: {
+            exclude: ['password', 'createdAt', 'updatedAt'], },
         }],
       })
       .then(users => res.status(200).send(users))
       .catch(error => res.status(400).send(error));
-    } else {
-      if(isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))) {
-        return res.status(400).send({success: false, message: 'Query Parameters are not Integers.'});
-      }
-      Documents.findAll({where: {access: 'public'},
+    }
+    if (isNaN(parseInt(req.query.limit, 10)) || isNaN(parseInt(req.query.offset, 10))) {
+      return res.status(400).send({ success: false, message: 'Query Parameters are not Integers.' });
+    }
+    Documents.findAll({ where: { access: 'public' },
       include: [{
         model: Users,
         attributes: {
           exclude: ['password', 'createdAt', 'updatedAt'],
         },
       }],
-      offset: req.query.offset, limit: req.query.limit})
-      .then( usr => res.status(200).send(usr))
-      .catch(error => res.status(400).send(error));
-    }
+      offset: req.query.offset,
+      limit: req.query.limit
+    })
+    .then(usr => res.status(200).send(usr))
+    .catch(error => res.status(400).send(error));
   }
-  retrieveUserDocuments(req, res) {
+
+  /**
+  * Gets a user's documents
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {array} object of user's document.
+  */
+  static retrieveUserDocuments(req, res) {
     return Documents
     .findAll({ where: { userId: req.params.userId } })
     .then((document) => {
@@ -55,7 +79,14 @@ class Document {
     })
     .catch(error => res.status(400).send(error));
   }
-  retrieve(req, res) {
+
+  /**
+  * Gets a specific document
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} document object.
+  */
+  static retrieve(req, res) {
     return Documents
     .findById(req.params.docId)
     .then((doc) => {
@@ -68,7 +99,14 @@ class Document {
     })
     .catch(error => res.status(400).send(error));
   }
-  update(req, res) {
+
+  /**
+  * Update a document
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} updated document object.
+  */
+  static update(req, res) {
     return Documents
     .findById(req.params.docId)
     .then((doc) => {
@@ -89,7 +127,14 @@ class Document {
     })
     .catch(error => res.status(400).send(error));
   }
-  destroy(req, res) {
+
+  /**
+  * Delete a document
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} deleted document object.
+  */
+  static destroy(req, res) {
     return Documents
     .findById(req.params.docId)
     .then((doc) => {
@@ -105,7 +150,14 @@ class Document {
     })
     .catch(error => res.status(400).send(error));
   }
-  findAll(req, res) {
+
+  /**
+  * Find a document
+  * @param {Object} req Incoming HTTP request.
+  * @param {Object} res Outgoing HTTP response.
+  * @returns {object} selected document object.
+  */
+  static findAll(req, res) {
     return Documents
     .findAll({
       where: {
@@ -120,7 +172,7 @@ class Document {
       },
     })
     .then((document) => {
-      if (document.length<1) {
+      if (document.length < 1) {
         return res.status(404).send({
           message: 'No Documents found.',
         });

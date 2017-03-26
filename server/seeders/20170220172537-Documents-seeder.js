@@ -1,5 +1,5 @@
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up(queryInterface) {
     return queryInterface.bulkInsert('Documents',
       [{
         title: 'Helpful Spouse',
@@ -40,7 +40,7 @@ module.exports = {
       ], {});
   },
 
-  down: function (queryInterface, Sequelize) {
+  down(queryInterface) {
     return queryInterface.bulkDelete('Documents', null, {});
   },
 };

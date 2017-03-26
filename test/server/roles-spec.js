@@ -6,8 +6,6 @@ const Users = require('./helpers/users');
 const token = require('./helpers/token');
 const expect = require('chai').expect;
 
-const should = chai.should();
-
 chai.use(chaiHttp);
 // Our parent block
 
@@ -31,6 +29,7 @@ describe('Roles', () => {
         done();
       });
     });
+
     it('it should GET all the roles', (done) => {
       chai.request(server)
       .get('/roles')

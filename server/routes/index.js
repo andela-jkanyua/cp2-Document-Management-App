@@ -1,9 +1,8 @@
-const {Users, Documents, Roles} = require('../controllers');
+const { Users, Documents, Roles } = require('../controllers');
 
 
 // API ROUTE =================;
 module.exports = (app) => {
-
   // AUTHENTICATION
   app.post('/login', Users.login);
   //  Using a POST not GET because browsers will pre-fetch pages they "think" you will visit next.
@@ -35,5 +34,4 @@ module.exports = (app) => {
   require('../middleware/roles')(app);
   app.post('/roles', Roles.create);
   app.get('/roles', Roles.list);
-
 };
