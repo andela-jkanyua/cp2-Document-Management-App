@@ -2,7 +2,7 @@ const Role = require('../models').Role;
 
 module.exports = (app) => {
 // route middleware to verify an admin
-  app.use('/roles', (req, res, next) => {
+  app.use('/api/roles', (req, res, next) => {
     Role.findById(req.decoded.user.roleId)
     .then((role) => {
       if (!role.isAdmin) {

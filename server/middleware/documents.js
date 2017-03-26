@@ -3,7 +3,7 @@ const Role = require('../models').Role;
 const Documents = require('../models').Documents;
 
 module.exports = (app) => {
-  app.use('/users/:userId/documents', (req, res, next) => {
+  app.use('/api/users/:userId/documents', (req, res, next) => {
     Role.findById(req.decoded.user.roleId)
     .then((role) => {
       if (parseInt(req.decoded.user.id, 10) === parseInt(req.params.userId, 10) || role.isAdmin) {
@@ -13,7 +13,7 @@ module.exports = (app) => {
       }
     });
   });
-  app.use('/documents/:docId', (req, res, next) => {
+  app.use('/api/documents/:docId', (req, res, next) => {
     Documents.findById(parseInt(req.params.docId, 10))
     .then((doc) => {
       if (!doc) {

@@ -22,7 +22,7 @@ describe('Roles', () => {
     it('it only allows Admin user', (done) => {
       tokens.notAdminUser = token.generate(Users[1]);
       chai.request(server)
-      .get('/roles')
+      .get('/api/roles')
       .set('x-access-token', tokens.notAdminUser)
       .end((err, res) => {
         res.should.have.status(403);
@@ -32,7 +32,7 @@ describe('Roles', () => {
 
     it('it should GET all the roles', (done) => {
       chai.request(server)
-      .get('/roles')
+      .get('/api/roles')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(200);
@@ -44,7 +44,7 @@ describe('Roles', () => {
   describe('/POST roles', () => {
     it('creates a new role', (done) => {
       chai.request(server)
-      .post('/roles')
+      .post('/api/roles')
       .set('x-access-token', tokens.user)
       .send({
         title: 'New Role',
@@ -59,7 +59,7 @@ describe('Roles', () => {
     });
     it('does not POST invalid role', (done) => {
       chai.request(server)
-      .post('/roles')
+      .post('/api/roles')
       .set('x-access-token', tokens.user)
       .send({ description: 'Role without title' })
       .end((err, res) => {

@@ -22,17 +22,14 @@ module.exports = (app) => {
           .json({
             success: false, message: 'Failed to authenticate token.' });
         }
-
         // Check if token is valid
-
-
         req.decoded = decoded;
         next();
       });
     } else {
       // if there is no token
       // return an error
-      return res.status(403).sendFile(path.join(__dirname, '../../client/src/index.html'));
+      return res.status(403).json({success: false, message: 'No token provided'});
     }
   });
 };

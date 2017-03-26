@@ -22,7 +22,7 @@ describe('Documents', () => {
   describe('/GET Documents', () => {
     it('returns an array of all public documents', (done) => {
       chai.request(server)
-        .get('/documents')
+        .get('/api/documents')
         .set('x-access-token', tokens.user)
         .end((err, res) => {
           expect(res.status).to.equal(200);
@@ -33,7 +33,7 @@ describe('Documents', () => {
 
     it('ensures non-owner cannot GET a document', (done) => {
       chai.request(server)
-        .get('/users/1/documents')
+        .get('/api/users/1/documents')
         .set('x-access-token', tokens.notAdmin)
         .end((err, res) => {
           res.should.have.status(403);
@@ -45,7 +45,7 @@ describe('Documents', () => {
 
     it('ensures owner/admin can GET a specific document', (done) => {
       chai.request(server)
-        .get('/users/1/documents')
+        .get('/api/users/1/documents')
         .set('x-access-token', tokens.user)
         .end((err, res) => {
           res.should.have.status(200);
@@ -56,7 +56,7 @@ describe('Documents', () => {
 
     it('allows pagination for users.', (done) => {
       chai.request(server)
-      .get('/documents?limit=1&offset=1')
+      .get('/api/documents?limit=1&offset=1')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         // Please note that we delete some documents in describe DELETE
@@ -69,7 +69,7 @@ describe('Documents', () => {
 
     it('ensures Limit and Offset are integers', (done) => {
       chai.request(server)
-      .get('/documents?limit=notInt&offset=notInt')
+      .get('/api/documents?limit=notInt&offset=notInt')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(400);
@@ -81,7 +81,7 @@ describe('Documents', () => {
 
     it('should search documents title for a term', (done) => {
       chai.request(server)
-      .get('/search/documents/?q=Lorem')
+      .get('/api/search/documents/?q=Lorem')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(200);
@@ -93,7 +93,7 @@ describe('Documents', () => {
 
     it('should search documents content for a term', (done) => {
       chai.request(server)
-      .get('/search/documents/?q=solmen')
+      .get('/api/search/documents/?q=solmen')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(200);
@@ -105,7 +105,7 @@ describe('Documents', () => {
 
     it('should return appropriate message if document not found', (done) => {
       chai.request(server)
-      .get('/search/documents/?q=documentnoexist')
+      .get('/api/search/documents/?q=documentnoexist')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(404);
@@ -119,7 +119,7 @@ describe('Documents', () => {
   describe('/POST documents', () => {
     it('should POST a document with all fields', (done) => {
       chai.request(server)
-        .post('/documents')
+        .post('/api/documents')
         .set('x-access-token', tokens.user)
         .send(Documents[0])
         .end((err, res) => {
@@ -132,7 +132,7 @@ describe('Documents', () => {
 
     it('should Not POST a document without a title', (done) => {
       chai.request(server)
-        .post('/documents')
+        .post('/api/documents')
         .set('x-access-token', tokens.user)
         .send({ content: 'Document with content only' })
         .end((err, res) => {
@@ -146,7 +146,7 @@ describe('Documents', () => {
   describe('/UPDATE documents/:id', () => {
     it('should update a document', (done) => {
       chai.request(server)
-        .put('/documents/1')
+        .put('/api/documents/1')
         .set('x-access-token', tokens.user)
         .send({ title: 'Updated Title' })
         .end((err, res) => {
@@ -159,7 +159,7 @@ describe('Documents', () => {
 
     it('ensures only owner should update a document', (done) => {
       chai.request(server)
-        .put('/documents/4')
+        .put('/api/documents/4')
         .set('x-access-token', tokens.notAdmin)
         .send({ title: 'Updated Title' })
         .end((err, res) => {
@@ -174,7 +174,7 @@ describe('Documents', () => {
   describe('/DELETE documents/:id', () => {
     it('deletes document', (done) => {
       chai.request(server)
-      .delete(`/documents/${Documents[0].id}`)
+      .delete(`/api/documents/${Documents[0].id}`)
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(204);
@@ -184,7 +184,7 @@ describe('Documents', () => {
 
     it('ensures user cannot delete a document created by other user', (done) => {
       chai.request(server)
-      .delete(`/documents/${Documents[3].id}`)
+      .delete(`/api/documents/${Documents[3].id}`)
       .set('x-access-token', tokens.notAdmin)
       .end((err, res) => {
         res.should.have.status(403);

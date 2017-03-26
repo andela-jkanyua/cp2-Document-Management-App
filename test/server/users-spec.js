@@ -23,7 +23,7 @@ describe('Users', () => {
   describe('/GET users', () => {
     it('it should GET all the users', (done) => {
       chai.request(server)
-      .get('/users')
+      .get('/api/users')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(200);
@@ -35,7 +35,7 @@ describe('Users', () => {
 
     it('should GET a specific user', (done) => {
       chai.request(server)
-      .get('/users/1')
+      .get('/api/users/1')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(200);
@@ -47,7 +47,7 @@ describe('Users', () => {
 
     it('allows pagination for users.', (done) => {
       chai.request(server)
-      .get('/users?limit=2&offset=3')
+      .get('/api/users?limit=2&offset=3')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(200);
@@ -61,7 +61,7 @@ describe('Users', () => {
 
     it('ensures Limit and Offset are integers', (done) => {
       chai.request(server)
-      .get('/users?limit=notInt&offset=notInt')
+      .get('/api/users?limit=notInt&offset=notInt')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(400);
@@ -73,7 +73,7 @@ describe('Users', () => {
 
     it('allows only user/owner or admin to access user details', (done) => {
       chai.request(server)
-      .get('/users/1')
+      .get('/api/users/1')
       .set('x-access-token', tokens.notAdmin)
       .end((err, res) => {
         res.should.have.status(403);
@@ -85,7 +85,7 @@ describe('Users', () => {
 
     it('allows only user/owner or admin access to documents', (done) => {
       chai.request(server)
-      .get('/users/1/documents')
+      .get('/api/users/1/documents')
       .set('x-access-token', tokens.notAdmin)
       .end((err, res) => {
         res.should.have.status(403);
@@ -97,7 +97,7 @@ describe('Users', () => {
 
     it('should search a user by username', (done) => {
       chai.request(server)
-      .get('/search/users/?q=JaneD')
+      .get('/api/search/users/?q=JaneD')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(200);
@@ -109,7 +109,7 @@ describe('Users', () => {
 
     it('should return appropriate message if username not found', (done) => {
       chai.request(server)
-      .get('/search/users/?q=usernoexist')
+      .get('/api/search/users/?q=usernoexist')
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(404);
@@ -125,7 +125,7 @@ describe('Users', () => {
   describe('/POST users', () => {
     it('should POST a user with all fields', (done) => {
       chai.request(server)
-      .post('/users')
+      .post('/api/users')
       .send(Users[1])
       .end((err, res) => {
         res.should.have.status(201);
@@ -142,7 +142,7 @@ describe('Users', () => {
         lastName: 'Bar',
       };
       chai.request(server)
-      .post('/users')
+      .post('/api/users')
       .set('x-access-token', tokens.user)
       .send(invalidUser)
       .end((err, res) => {
@@ -162,7 +162,7 @@ describe('Users', () => {
         roleId: '1',
       };
       chai.request(server)
-      .post('/users')
+      .post('/api/users')
       .set('x-access-token', tokens.user)
       .send(invalidEmail)
       .end((err, res) => {
@@ -178,7 +178,7 @@ describe('Users', () => {
   describe('PUT /users/:id', () => {
     it('should update a user', (done) => {
       chai.request(server)
-      .put('/users/2')
+      .put('/api/users/2')
       .set('x-access-token', tokens.user)
       .send({ email: 'updated@email.com' })
       .end((err, res) => {
@@ -191,7 +191,7 @@ describe('Users', () => {
 
     it('user can only edit own details', (done) => {
       chai.request(server)
-      .put('/users/1')
+      .put('/api/users/1')
       .set('x-access-token', tokens.notAdmin)
       .send({ email: 'updated@email.com' })
       .end((err, res) => {
@@ -205,7 +205,7 @@ describe('Users', () => {
   describe('DELETE /users/:id', () => {
     it('deletes user', (done) => {
       chai.request(server)
-      .delete(`/users/${Users[0].id}`)
+      .delete(`/api/users/${Users[0].id}`)
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(204);
