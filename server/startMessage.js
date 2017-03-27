@@ -1,4 +1,4 @@
-import colors from 'colors';
+const colors = require('colors');
 
 /* eslint-disable no-console */
 

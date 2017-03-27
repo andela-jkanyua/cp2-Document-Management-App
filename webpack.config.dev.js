@@ -1,7 +1,7 @@
-import webpack from 'webpack';
-import path from 'path';
+const webpack = require('webpack');
+const path = require('path');
 
-export default {
+module.exports = {
   debug: true,
   devtool: 'inline-source-map',
   noInfo: false,

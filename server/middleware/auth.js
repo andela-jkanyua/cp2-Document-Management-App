@@ -1,5 +1,4 @@
-import path from 'path';
-
+const path = require('path');
 const jwt = require('jsonwebtoken');
 
 const secret = process.env.SECRET;

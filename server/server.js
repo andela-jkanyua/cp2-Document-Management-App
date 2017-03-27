@@ -1,12 +1,10 @@
+const express = require('express')
+const webpack = require('webpack')
+const path = require('path');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const config = require('../webpack.config.dev');
 
-
-import express from 'express';
-import webpack from 'webpack';
-import path from 'path';
-import open from 'open';
-import morgan from 'morgan';
-import bodyParser from 'body-parser';
-import config from '../webpack.config.dev';
 /* eslint-disable no-console */
 require('dotenv').config();
 
@@ -38,7 +36,7 @@ app.listen(port, (err) => {
   if (err) {
     console.log(err);
   } else {
-    open(`http://localhost:${port}`);
+  console.log(`App at: http://localhost:${port}`);
   }
 });
 module.exports = app;
