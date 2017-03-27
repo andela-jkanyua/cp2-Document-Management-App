@@ -1,6 +1,6 @@
-import React, {PropTypes}  from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -11,7 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import * as documentActions from '../../actions/documentActions';
 
 import DocumentsList from '../../components/Documents/DocumentsList';
-import AddDocument from '../../components/Documents/AddDocument'
+import AddDocument from '../../components/Documents/AddDocument';
 const style = {
   position: 'fixed',
   bottom: 20,
@@ -25,9 +25,9 @@ class ViewDocuments extends React.Component {
     this.state = {
       open: false,
       document: {
-        title: "",
-        content: "",
-        access: "",
+        title: '',
+        content: '',
+        access: '',
       }
     };
     this.handleOpen = this.handleOpen.bind(this);
@@ -36,72 +36,70 @@ class ViewDocuments extends React.Component {
 
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onContentChange = this.onContentChange.bind(this);
-
-
-  };
+  }
   onSetAccess(event, index, value) {
     const doc = this.state.document;
     doc.access = value;
-    this.setState({document: doc});
+    this.setState({ document: doc });
   }
   onTitleChange(event) {
     const doc = this.state.document;
     doc.title = event.target.value;
-    this.setState({document: doc});
+    this.setState({ document: doc });
   }
   onContentChange(event) {
     const doc = this.state.document;
     doc.content = event.target.value;
-    this.setState({document: doc});
+    this.setState({ document: doc });
   }
-  handleOpen (){
-    this.setState({open: true});
-  };
+  handleOpen() {
+    this.setState({ open: true });
+  }
 
-  handleClose () {
-    this.setState({open: false});
-  };
+  handleClose() {
+    this.setState({ open: false });
+  }
 
-  render () {
+  render() {
     const dialogActions = [
       <FlatButton
-      label="Cancel"
-      primary={true}
-      onTouchTap={this.handleClose}
+        label="Cancel"
+        primary
+        onTouchTap={this.handleClose}
       />,
       <FlatButton
-      label="Create Document"
-      primary={true}
-      keyboardFocused={true}
-      onTouchTap={(e) => {e.preventDefault(); this.props.actions.createDocument(this.state.document); this.handleClose}}
+        label="Create Document"
+        primary
+        keyboardFocused
+        onTouchTap={(e) => { e.preventDefault(); this.props.actions.createDocument(this.state.document); this.handleClose; }}
       />,
     ];
     return (
       <div className="container">
-      <br />
-      <DocumentsList documents = {this.props.documents} handleOpen={this.handleOpen} style ={style}/>
-      <br />
-      <Dialog
-      title="Create a new Document"
-      actions={dialogActions}
-      modal={false}
-      open={this.state.open}
-      onRequestClose={this.handleClose}
-      >
-      <AddDocument style={style}
-                   onSetAccess={this.onSetAccess}
-                   doc={this.state.document}
-                   onTitleChange = {this.onTitleChange}
-                   onContentChange = {this.onContentChange}
+        <br />
+        <DocumentsList documents={this.props.documents} handleOpen={this.handleOpen} style={style} />
+        <br />
+        <Dialog
+          title="Create a new Document"
+          actions={dialogActions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          <AddDocument
+            style={style}
+            onSetAccess={this.onSetAccess}
+            doc={this.state.document}
+            onTitleChange={this.onTitleChange}
+            onContentChange={this.onContentChange}
+          />
 
-                   />
-
-      </Dialog>
+        </Dialog>
       </div>
     );
   }
 }
-ViewDocuments.PropTypes ={
+ViewDocuments.PropTypes = {
   documents: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 };
@@ -110,7 +108,7 @@ function mapStateToProps(state, ownProps) {
     documents: state.documents
   };
 }
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(documentActions, dispatch)
   };

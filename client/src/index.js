@@ -7,22 +7,22 @@ import './styles/material.css';
 import './styles/styles.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import configureStore from './store/configureStore';
-import {Provider} from 'react-redux';
-import {loadDocuments} from './actions/documentActions';
+import { Provider } from 'react-redux';
+import { loadDocuments } from './actions/documentActions';
 
-const injectTapEventPlugin = require("react-tap-event-plugin");
+const injectTapEventPlugin = require('react-tap-event-plugin');
 injectTapEventPlugin();
 
 const store = configureStore();
 store.dispatch(loadDocuments());
 const App = () => (
   <MuiThemeProvider>
-   <Router history={browserHistory} routes={routes} />
+    <Router history={browserHistory} routes={routes} />
   </MuiThemeProvider>
 );
 
 render(
-  <Provider store ={store}>
+  <Provider store={store}>
     <App />
   </Provider>,
    document.getElementById('app')
