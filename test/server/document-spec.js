@@ -31,6 +31,18 @@ describe('Documents', () => {
         });
     });
 
+    it('returns a specific document', (done) => {
+      chai.request(server)
+        .get('/api/documents/2')
+        .set('x-access-token', tokens.user)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body.id).to.be.eql(2);
+          done();
+        });
+    });
+
     it('ensures non-owner cannot GET a document', (done) => {
       chai.request(server)
         .get('/api/users/1/documents')
@@ -43,6 +55,19 @@ describe('Documents', () => {
         });
     });
 
+    it('returns appropriate message if a document is not found', (done) => {
+      chai.request(server)
+        .get('/api/documents/22')
+        .set('x-access-token', tokens.notAdmin)
+        .end((err, res) => {
+          res.should.have.status(403);
+          res.body.should.be.an('object');
+          res.body.success.should.be.eql(false);
+          res.body.message.should.be.eql('No such Document')
+          done();
+        });
+    });
+
     it('ensures owner/admin can GET a specific document', (done) => {
       chai.request(server)
         .get('/api/users/1/documents')
@@ -50,6 +75,18 @@ describe('Documents', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('array');
+          done();
+        });
+    });
+
+    it('returns appropriate message if user has no documents', (done) => {
+      chai.request(server)
+        .get('/api/users/12/documents')
+        .set('x-access-token', tokens.user)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.an('object');
+          res.body.message.should.eql('User has no Documents')
           done();
         });
     });
@@ -165,7 +202,7 @@ describe('Documents', () => {
         .end((err, res) => {
           res.should.have.status(403);
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Only Owner or Admin can modify');
+          expect(res.body.message).to.equal('Only Owner or Admin can access');
           done();
         });
     });
@@ -178,6 +215,18 @@ describe('Documents', () => {
       .set('x-access-token', tokens.user)
       .end((err, res) => {
         res.should.have.status(204);
+        done();
+      });
+    });
+
+    it('does not delete non-existing document', (done) => {
+      chai.request(server)
+      .delete(`/api/documents/88`)
+      .set('x-access-token', tokens.user)
+      .end((err, res) => {
+        res.should.have.status(403);
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('No such Document');
         done();
       });
     });
