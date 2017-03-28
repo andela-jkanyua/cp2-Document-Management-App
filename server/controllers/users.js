@@ -74,6 +74,7 @@ class User {
         Users.create({
           email: req.body.email,
           password: hash,
+          username: req.body.username,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           roleId: req.body.roleId,

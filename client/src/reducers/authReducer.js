@@ -27,7 +27,25 @@ export default function authReducer(state = {
     case types.LOGOUT_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
-        isAuthenticated: false
+        isAuthenticated: false,
+        user: null
+      });
+    case types.SIGNUP_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true,
+        isSignedUp: false,
+      });
+    case types.SIGNUP_SUCCESS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isSignedUp: true,
+        errorMessage: '',
+      });
+    case types.SIGNUP_FAILURE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isSignedUp: false,
+        errorMessage: 'Server Error.'
       });
     default:
       return state;

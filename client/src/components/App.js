@@ -1,32 +1,43 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
-import Header from './common/header';
-import Footer from './common/footer';
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
+import Header from './common/header';
+import Footer from './common/footer';
 import * as authActions from '../actions/authActions';
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <Header isAuthenticated={this.props.appState.auth.isAuthenticated} logoutUser={this.props.actions.logoutUser} />
-        {this.props.children}
-        <Footer />
-      </div>
-    );
-  }
-}
+/**
+ * @override
+ */
+const App = props => (
+  <div>
+    <Header
+      isAuthenticated={props.appState.auth.isAuthenticated}
+      logoutUser={props.actions.logoutUser}
+    />
+    {props.children}
+    <Footer />
+  </div>
+);
+
 App.PropTypes = {
-  children: PropTypes.object.isRequired
+  children: PropTypes.object.isRequired,
+  appState: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
-function mapStateToProps(state, ownProps) {
+/**
+ * @override
+ */
+function mapStateToProps(state) {
   return {
     appState: state
   };
 }
+
+/**
+ * @override
+ */
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(authActions, dispatch)

@@ -39,6 +39,7 @@ module.exports = {
       },
       roleId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
       },
     }),
   down: queryInterface => queryInterface.dropTable('Users'),

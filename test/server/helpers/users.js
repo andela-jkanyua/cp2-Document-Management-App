@@ -2,6 +2,7 @@ module.exports = [{
   id: 1,
   email: 'johndoe@example.com',
   password: 'password',
+  username: 'JohnDoe',
   firstName: 'John',
   lastName: 'Doe',
   roleId: 1,
@@ -10,6 +11,7 @@ module.exports = [{
 }, {
   id: 2,
   email: 'stuff@email.au',
+  username: 'stuff',
   password: 'password',
   firstName: 'Jane',
   lastName: 'Doe',
@@ -19,6 +21,7 @@ module.exports = [{
 }, {
   id: 3,
   email: 'test@login.com',
+  username: 'testlogin',
   password: 'letmein',
   firstName: 'Test',
   lastName: 'Login',

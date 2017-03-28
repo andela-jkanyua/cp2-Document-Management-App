@@ -5,8 +5,7 @@ export default function documentReducer(state = [], action) {
     case types.LOAD_DOCUMENTS_SUCCESS:
       return action.documents;
     case types.CREATE_DOCUMENT_SUCCESS:
-      return [...state, Object.assign({}, action.document)
-      ];
+      return state;
     default:
       return state;
   }

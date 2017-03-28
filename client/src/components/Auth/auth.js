@@ -4,6 +4,8 @@ import { Card, CardHeader, CardTitle, CardText } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
+import { TextValidator } from 'react-material-ui-form-validator';
+
 const divStyle = {
   margin: '0 auto',
   width: '344px',
@@ -16,23 +18,25 @@ const Auth = props => (
 
       {props.errorMessage && <p className="alert alert-danger"> Invalid Username or Password </p>}
       <div className="field-line">
-        <TextField
-
+        <TextValidator
           floatingLabelText="Email"
           name="email"
           onChange={props.onEmailChange}
           value={props.user.email}
-          errorText={props.validatorError.error}
+          validators={['required', 'isEmail']}
+          errorMessages={['Email is required', 'Email is not valid']}
         />
       </div>
 
       <div className="field-line">
-        <TextField
+        <TextValidator
           floatingLabelText="Password"
           type="password"
           name="password"
+          value={props.user.password}
           onChange={props.onPasswordChange}
-          required
+          validators={['required']}
+          errorMessages={['Password is required']}
         />
       </div>
       <div>
@@ -42,7 +46,7 @@ const Auth = props => (
       </div> <br /> <br />
 
       <div className="button-line">
-        <RaisedButton onClick={props.onSubmit} label="Log in" primary /><br /><br />
+        <RaisedButton type="submit" label="Log in" primary /><br /><br />
         Don't have an account? <Link to="signup" >Sign Up</Link> here!<br /><br />
       </div>
     </Card><br /><br /><br />

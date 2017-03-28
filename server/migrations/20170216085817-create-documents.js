@@ -28,6 +28,7 @@ module.exports = {
     },
     userId: {
       type: Sequelize.INTEGER,
+      allowNull: false,
     },
   }),
   down: queryInterface => queryInterface.dropTable('Documents'),

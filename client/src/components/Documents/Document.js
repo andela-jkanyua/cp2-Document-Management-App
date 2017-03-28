@@ -1,13 +1,11 @@
 import React, { PropTypes } from 'react';
 import { Card, CardHeader, CardTitle, CardText } from 'material-ui/Card';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
 import Chip from 'material-ui/Chip';
 import Gravatar from 'react-gravatar';
 import md5 from 'blueimp-md5';
 
 const Document = props => (
+
   <div className="container">
     <Card>
       <CardHeader

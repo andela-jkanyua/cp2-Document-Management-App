@@ -1,17 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-
 import * as documentActions from '../../actions/documentActions';
-
 import DocumentsList from '../../components/Documents/DocumentsList';
 import AddDocument from '../../components/Documents/AddDocument';
+
 const style = {
   position: 'fixed',
   bottom: 20,
@@ -61,6 +56,7 @@ class ViewDocuments extends React.Component {
   }
 
   render() {
+    {console.log(this.props)}
     const dialogActions = [
       <FlatButton
         label="Cancel"
@@ -71,7 +67,12 @@ class ViewDocuments extends React.Component {
         label="Create Document"
         primary
         keyboardFocused
-        onTouchTap={(e) => { e.preventDefault(); this.props.actions.createDocument(this.state.document); this.handleClose; }}
+        onTouchTap={(e) => {
+          e.preventDefault();
+          this.props.actions.createDocument(this.state.document);
+          this.props.actions.loadDocuments();
+          this.handleClose();
+        }}
       />,
     ];
     return (
@@ -103,7 +104,7 @@ ViewDocuments.PropTypes = {
   documents: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 };
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     documents: state.documents
   };

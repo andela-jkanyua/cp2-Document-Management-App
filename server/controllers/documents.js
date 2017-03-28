@@ -17,7 +17,7 @@ class Document {
         title: req.body.title,
         content: req.body.content,
         dateCreated: req.body.dateCreated,
-        userId: req.body.userId,
+        userId: req.decoded.user.id || req.body.userId,
         access: req.body.access,
       })
       .then(documents => res.status(201).send(documents))

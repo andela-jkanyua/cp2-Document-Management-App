@@ -1,8 +1,12 @@
-import * as constants from './actionTypes';
 import request from 'superagent';
+import * as constants from './actionTypes';
 import * as tokenUtils from '../utils/tokenUtility';
 
-
+/**
+ * Request log in.
+ * @param {object} creds Log in credentials.
+ * @returns {object} creds and action type
+ */
 export function requestLogin(creds) {
   return {
     type: constants.LOGIN_REQUEST,
@@ -12,6 +16,11 @@ export function requestLogin(creds) {
   };
 }
 
+/**
+ * Receive log in.
+ * @param {object} user  user details object.
+ * @returns {object} user and action type object
+ */
 export function receiveLogin(user) {
   return {
     type: constants.LOGIN_SUCCESS,
@@ -22,6 +31,11 @@ export function receiveLogin(user) {
   };
 }
 
+/**
+ * Receive log in Error.
+ * @param {object} message  Error object.
+ * @returns {object} Error and action type object
+ */
 export function loginError(message) {
   return {
     type: constants.LOGIN_FAILURE,
@@ -31,6 +45,11 @@ export function loginError(message) {
 
   };
 }
+
+/**
+ * Request logout
+ * @returns {object} isFetching, isAuthenticated, and action type object
+ */
 export function requestLogout() {
   return {
     type: constants.LOGOUT_REQUEST,
@@ -39,6 +58,10 @@ export function requestLogout() {
   };
 }
 
+/**
+ * Receive logout
+ * @returns {object} isFetching, isAuthenticated, and action type object
+ */
 export function receiveLogout() {
   return {
     type: constants.LOGOUT_SUCCESS,
@@ -47,6 +70,47 @@ export function receiveLogout() {
   };
 }
 
+/**
+ * Request signup.
+ * @param {object} userDetails  User signup details.
+ * @returns {object} action type object
+ */
+export function requestSignup(userDetails) {
+  return {
+    type: constants.SIGNUP_REQUEST,
+    isFetching: true,
+    isSignedUp: false,
+    userDetails
+  };
+}
+
+/**
+ * @override
+ */
+export function receiveSignup(user) {
+  return {
+    type: constants.SIGNUP_SUCCESS,
+    isFetching: false,
+    isSignedUp: user.success,
+  };
+}
+
+/**
+ * @override
+ */
+export function signupError(error) {
+  return {
+    type: constants.SIGNUP_FAILURE,
+    isFetching: false,
+    isSignedUp: error.success,
+    message: error
+
+  };
+}
+
+/**
+ * @override
+ */
 export function loginUser(credentials) {
   return (dispatch) => {
     dispatch(requestLogin(credentials));
@@ -58,15 +122,36 @@ export function loginUser(credentials) {
           tokenUtils.setAuthToken(response.body.token);
           dispatch(receiveLogin(response.body));
         }).catch((err) => {
-          console.log(err.response);
           dispatch(loginError(err.response));
         })
     );
   };
 }
+/**
+ * @override
+ */
+export function signupUser(userDetails) {
+  return (dispatch) => {
+    dispatch(requestLogin(userDetails));
+    return (
+      request
+        .post('api/users')
+        .send(
+          Object.assign({}, userDetails, {
+            roleId: 2
+          }))
+        .then((response) => {
+          dispatch(receiveSignup(response.body));
+        }).catch((err) => {
+          dispatch(signupError(err.response));
+        })
+    );
+  };
+}
 
-
-// Logs the user out
+/**
+ * @override
+ */
 export function logoutUser() {
   return (dispatch) => {
     dispatch(requestLogout());
