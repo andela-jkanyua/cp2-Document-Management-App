@@ -24,7 +24,7 @@ module.exports = (app) => {
         if (parseInt(req.decoded.user.id, 10) === parseInt(doc.userId, 10) || role.isAdmin) {
           next();
         } else {
-          return res.status(403).send({ success: false, message: 'Only Owner or Admin can modify' });
+          return res.status(403).send({ success: false, message: 'Only Owner or Admin can access' });
         }
       });
     });

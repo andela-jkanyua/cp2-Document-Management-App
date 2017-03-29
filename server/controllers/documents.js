@@ -70,7 +70,7 @@ class Document {
     return Documents
     .findAll({ where: { userId: req.params.userId } })
     .then((document) => {
-      if (!document) {
+      if (document.length==0) {
         return res.status(404).send({
           message: 'User has no Documents',
         });
@@ -90,11 +90,6 @@ class Document {
     return Documents
     .findById(req.params.docId)
     .then((doc) => {
-      if (!doc) {
-        return res.status(404).send({
-          message: 'Document Not Found',
-        });
-      }
       return res.status(200).send(doc);
     })
     .catch(error => res.status(400).send(error));
@@ -140,7 +135,7 @@ class Document {
     .then((doc) => {
       if (!doc) {
         return res.status(400).send({
-          message: 'User Not Found',
+          message: 'Document Not Found',
         });
       }
       return doc

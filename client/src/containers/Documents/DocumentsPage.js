@@ -28,7 +28,6 @@ class ViewDocuments extends React.Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.onSetAccess = this.onSetAccess.bind(this);
-
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onContentChange = this.onContentChange.bind(this);
   }

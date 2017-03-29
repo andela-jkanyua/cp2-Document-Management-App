@@ -11,7 +11,7 @@ module.exports = (app) => {
       }
     });
   });
-  app.use('/api/users', (req, res, next) => {
+  app.get('/api/users', (req, res, next) => {
     Role.findById(req.decoded.user.roleId)
     .then((role) => {
       if (!role.isAdmin) {
