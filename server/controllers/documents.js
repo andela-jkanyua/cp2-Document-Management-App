@@ -68,7 +68,14 @@ class Document {
   */
   static retrieveUserDocuments(req, res) {
     return Documents
-    .findAll({ where: { userId: req.params.userId } })
+    .findAll({ where: { userId: req.params.userId },
+      include: [{
+        model: Users,
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
+      }],
+     })
     .then((document) => {
       if (document.length==0) {
         return res.status(404).send({
@@ -103,7 +110,14 @@ class Document {
   */
   static update(req, res) {
     return Documents
-    .findById(req.params.docId)
+    .find({ where: {id: req.params.docId},
+      include: [{
+        model: Users,
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
+      }],
+    })
     .then((doc) => {
       if (!doc) {
         return res.status(404).send({
@@ -140,7 +154,7 @@ class Document {
       }
       return doc
         .destroy()
-        .then(() => res.status(204).send(doc))
+        .then(() => res.status(204)
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));

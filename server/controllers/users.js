@@ -52,7 +52,8 @@ class User {
                 user:
                 {
                   id: user.id,
-                  email: user.email
+                  email: user.email,
+                  roleId: user.roleId
                 }
               }
             );
