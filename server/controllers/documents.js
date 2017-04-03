@@ -154,7 +154,7 @@ class Document {
       }
       return doc
         .destroy()
-        .then(() => res.status(204))
+        .then(() => res.status(204).send(doc))
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
