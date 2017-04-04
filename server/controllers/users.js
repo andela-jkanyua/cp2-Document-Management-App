@@ -67,20 +67,19 @@ class User {
   * @returns {Object} the created user.
   */
   static create(req, res) {
-
     if (req.body.email === undefined || req.body.password === undefined ||
        req.body.username === undefined || req.body.firstName === undefined
      || req.body.lastName === undefined || req.body.roleId === undefined) {
-       return res.status(400).send({
-         success: false,
-         message: `Please provide 'email', 'password', 'username', 'firstName', 'lastName', 'roleId'`  });
-     }
+      return res.status(400).send({
+        success: false,
+        message: 'Please provide \'email\', \'password\', \'username\', \'firstName\', \'lastName\', \'roleId\'' });
+    }
     const emailTest = /\S+@\S+\.\S+/;
     if (!emailTest.test(req.body.email)) {
-        return res.status(406).send({
-          success: false,
-          message: 'Not a valid email address' });
-      }
+      return res.status(406).send({
+        success: false,
+        message: 'Not a valid email address' });
+    }
 
     bcrypt.genSalt(saltRounds, (err, salt) => {
       bcrypt.hash(req.body.password, salt, (err, hash) => {
