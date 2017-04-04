@@ -1,0 +1,157 @@
+FORMAT: 1A
+HOST: https://edms.herokuapp.com
+# DMS-Sys
+DMS-Sys is a simple web app that handles documents. It allows consumets to manage your documents
+API V1 https://github.com/andela-jkanyua/cp2-Document-Management-App
+# Documentation guidelines
+DMS-Sys being a RESTful API
+Unauthenticated endpoints are ```api/login```, ```api/signup``` and ```api/documents``` (public documents only).
+# User
+Resources related to users in the API
+### Create A New User [POST /api/user]
+This end-point creates a new user.
+A user provide user details and the fields are validated to prevent invalid data.
+The following credentials are mandatory:
+    + First Name
+    + Last Names
+    + Email Address
+    + Username
+    + Password
+    + roleId
++ Request (application/json)
+    {
+        "firstName": "Test",
+        "lastName": "Example",
+        "email": "test@example.com",
+        "username": "TestE",
+        "password": "password123",
+        "roleId": 1
+    }
++ Response 200 (application/json)
+  + Body
+    {
+        "message": "User email: test@example.com Created!",
+        "success": true
+    }
+### Login A User [POST /api/login]
+This endpoint serves to login existing users. It expects ```username``` and ``` password ```.
++ Request (application/json)
+    {
+        "userName": "test@example.com",
+        "password": "password123"
+    }
++ Response 200 (application/json)
+    {
+        "success": true,
+        "message": "Authenticated",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6ImppbW5haC5tYWdpcmFAYW5kZWxhLmNvbSIsInJvbGVJZCI6MX0sImlhdCI6MTQ5MTI5NDE3MSwiZXhwIjoxNDkxMzgwNTcxfQ.PVbSgLmasOuEyKOqYqZUbNc7fbT-mB7fTBeZq4cBavE",
+        "user": {
+            "id": 1,
+            "email": "jimnah.magira@andela.com",
+            "roleId": 1
+        }
+    }
+### User Logout [GET /api/logout]
+This endpoint logs out a user.The session ends/expires after this.
++ Response 204 (application/json)
+    {
+    }
+
+### Users [GET /api/users]
+This endpoint fetches all users and displays user details (Admin Only)
++ Response 200 (application/json)
+    [
+        {
+            "id": 1,
+            "email": "jimnah.magira@andela.com",
+            "username": "JimnahK",
+            "firstName": "Jimnah",
+            "lastName": "Magira",
+            "roleId": 1
+        }
+    ]
+### Users [GET /api/users/:id]
+This end point gets a specific user by id
++ Response 200 (application/json)
+    {
+        "id": 1,
+        "email": "jimnah.magira@andela.com",
+        "username": "JimnahK",
+        "firstName": "Jimnah",
+        "lastName": "Magira",
+        "roleId": 1,
+        "Documents": []
+    }
+### Users [GET /api/users/search?q={username}]
+This endpoint searches a user by username (admin only)
++ Response 200 (application/json)
+    [
+      {
+        "id": 1,
+        "email": "jimnah.magira@andela.com",
+        "username": "JimnahK",
+        "firstName": "Jimnah",
+        "lastName": "Magira",
+      }
+    ]
+### Users [PUT /api/users/:id]
+This endpoint updates a user's details
++ Response 200 (application/json)
+    {
+      "email": "jimnahmagira@gmail.com",
+      "username": "JimnahK",
+      "firstName": "Jimnah",
+      "lastName": "Magira",
+      "roleId": 1
+    }
+### Users [DELETE /api/users/:docId]
+This endpoint deletes a user
++ Response 204 (application/json)
+# Documents
+Resources related to documents in the API
+### Documents [POST /api/users/:docId/documents]
+This endpoint allows user to create a document.Note: document title should be unique and not less than 5 characters
++ Response 200 (application/json)
+    {
+      "id": 2,
+      "title": "New Title",
+      "content": "Great API",
+      "userId": 1,
+      "access": "public",
+      "updatedAt": "2017-04-04T09:03:10.051Z",
+      "createdAt": "2017-04-04T09:03:10.051Z"
+    }
+### Documents [GET /api/documents]
+This endpoint finds matching instances of document.Note:public documents only
++ Response 200 (application/json)
+    [
+      {
+        "id": 2,
+        "title": "New Title",
+        "content": "Great API",
+        "access": "public",
+        "createdAt": "2017-04-04T09:03:10.051Z",
+        "updatedAt": "2017-04-04T09:03:10.051Z",
+        "userId": 1,
+        "User": {
+          "id": 1,
+          "email": "jimnahmagira@gmail.com",
+          "username": "JimnahK",
+          "firstName": "Jimnah",
+          "lastName": "Magira",
+          "roleId": 1
+        }
+      }
+    ]
+### Documents [GET /api/documents/{docId}]
+- This endpoint finds specific document (only owner or admin)
++ Response 200 (application/json)
+    {
+        "id": 2,
+        "title": "New Title",
+        "content": "Great API",
+        "access": "public",
+        "createdAt": "2017-04-04T09:03:10.051Z",
+        "updatedAt": "2017-04-04T09:03:10.051Z",
+        "userId": 1
+    }

@@ -20,4 +20,13 @@ module.exports = (app) => {
       next();
     });
   });
+  app.get('/api/search/users', (req, res, next) => {
+    Role.findById(req.decoded.user.roleId)
+    .then((role) => {
+      if (!role.isAdmin) {
+        return res.status(403).send({ success: false, message: 'Admin Users Only' });
+      }
+      next();
+    });
+  });
 };

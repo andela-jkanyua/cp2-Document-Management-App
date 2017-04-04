@@ -26,6 +26,10 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 app.use(express.static(path.join(__dirname, '../client/src/')));
 
+app.get('/api/docs', (req, res) => {
+  res.sendFile(path.join(__dirname, '../ApiDocs.html'));
+});
+
 require('./routes/index')(app);
 
 app.get('*', (req, res) => {
