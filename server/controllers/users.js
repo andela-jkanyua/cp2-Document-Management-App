@@ -67,7 +67,7 @@ class User {
   * @returns {Object} the created user.
   */
   static create(req, res) {
-    
+
     if (req.body.email === undefined || req.body.password === undefined ||
        req.body.username === undefined || req.body.firstName === undefined
      || req.body.lastName === undefined || req.body.roleId === undefined) {
@@ -213,6 +213,9 @@ class User {
             username: { $iLike: `%${req.query.q}%` },
           },
         ],
+      },
+      attributes: {
+        exclude: ['password', 'createdAt', 'updatedAt'],
       },
     })
     .then((user) => {
