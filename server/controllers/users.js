@@ -171,7 +171,13 @@ class User {
           lastName: req.body.lastName || user.lastName,
           roleId: req.body.roleId || user.roleId,
         })
-        .then(() => res.status(200).send(user))  // Send back the updated user.
+        .then(() => res.status(200).send({
+          email: user.email,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          roleId: user.roleId
+        }))  // Send back the updated user.
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
