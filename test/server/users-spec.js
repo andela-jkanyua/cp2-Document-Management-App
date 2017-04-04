@@ -137,6 +137,7 @@ describe('Users', () => {
 
     it('should NOT POST a user without all fields', (done) => {
       const invalidUser = {
+        email: 'test@test.com',
         password: 'password',
         firstName: 'Foo',
         lastName: 'Bar',
@@ -147,8 +148,8 @@ describe('Users', () => {
       .send(invalidUser)
       .end((err, res) => {
         res.should.have.status(400);
-        res.body.should.be.a('object');
-        res.body.should.have.property('errors');
+        res.body.success.should.be.eql(false);
+        res.body.message.should.be.eql(`Please provide 'email', 'password', 'username', 'firstName', 'lastName', 'roleId'` );
         done();
       });
     });
@@ -157,8 +158,9 @@ describe('Users', () => {
       const invalidEmail = {
         email: 'invalid-email',
         password: 'qwerty',
-        first_name: 'Foo',
-        last_name: 'Bar',
+        username: 'username',
+        firstName: 'Foo',
+        lastName: 'Bar',
         roleId: '1',
       };
       chai.request(server)
@@ -166,11 +168,9 @@ describe('Users', () => {
       .set('x-access-token', tokens.user)
       .send(invalidEmail)
       .end((err, res) => {
-        res.should.have.status(400);
-        expect(res.body.errors[0].type).to.contain('Validation error');
-        expect(res.body.errors[0].message).to.contain('Validation isEmail failed');
-        expect(res.body.errors[0].path).to.contain('email');
-        expect(res.body.name).to.contain('SequelizeValidationError');
+        res.should.have.status(406);
+        res.body.success.should.be.eql(false);
+        res.body.message.should.be.eql('Not a valid email address');
         done();
       });
     });

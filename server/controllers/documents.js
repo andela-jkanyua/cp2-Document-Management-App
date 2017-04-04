@@ -75,9 +75,9 @@ class Document {
           exclude: ['password', 'createdAt', 'updatedAt'],
         },
       }],
-     })
+    })
     .then((document) => {
-      if (document.length==0) {
+      if (document.length === 0) {
         return res.status(404).send({
           message: 'User has no Documents',
         });
@@ -96,9 +96,7 @@ class Document {
   static retrieve(req, res) {
     return Documents
     .findById(req.params.docId)
-    .then((doc) => {
-      return res.status(200).send(doc);
-    })
+    .then(doc => res.status(200).send(doc))
     .catch(error => res.status(400).send(error));
   }
 
@@ -110,7 +108,7 @@ class Document {
   */
   static update(req, res) {
     return Documents
-    .find({ where: {id: req.params.docId},
+    .find({ where: { id: req.params.docId },
       include: [{
         model: Users,
         attributes: {

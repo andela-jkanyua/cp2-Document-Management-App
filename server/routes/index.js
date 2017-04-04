@@ -34,4 +34,6 @@ module.exports = (app) => {
   require('../middleware/roles')(app);
   app.post('/api/roles', Roles.create);
   app.get('/api/roles', Roles.list);
+  app.put('/api/roles/:roleId', Roles.update);
+  app.delete('/api/roles/:roleId', Roles.destroy); // owner only
 };

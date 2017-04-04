@@ -1,5 +1,5 @@
-const express = require('express')
-const webpack = require('webpack')
+const express = require('express');
+const webpack = require('webpack');
 const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -36,7 +36,7 @@ app.listen(port, (err) => {
   if (err) {
     console.log(err);
   } else {
-  console.log(`App at: http://localhost:${port}`);
+    console.log(`App at: http://localhost:${port}`);
   }
 });
 module.exports = app;
