@@ -11,6 +11,7 @@ import * as authActions from '../actions/authActions';
  */
 const App = props => (
   <div>
+
     <Header
       isAuthenticated={props.appState.auth.isAuthenticated}
       logoutUser={props.actions.logoutUser}

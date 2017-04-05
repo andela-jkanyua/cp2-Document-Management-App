@@ -168,6 +168,7 @@ class Document {
     return Documents
     .findAll({
       where: {
+        access: 'public',
         $or: [
           {
             title: { $iLike: `%${req.query.q}%` },
@@ -177,6 +178,12 @@ class Document {
           },
         ],
       },
+      include: [{
+        model: Users,
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
+      }],
     })
     .then((document) => {
       if (document.length < 1) {

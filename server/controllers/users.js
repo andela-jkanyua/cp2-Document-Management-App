@@ -155,7 +155,14 @@ class User {
   */
   static update(req, res) {
     return Users
-    .findById(req.params.userId)
+    .findById(req.params.userId, {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt'],
+      },
+      include: [{
+        model: Documents,
+      }],
+    })
     .then((user) => {
       if (!user) {
         return res.status(404).send({
@@ -170,17 +177,12 @@ class User {
           lastName: req.body.lastName || user.lastName,
           roleId: req.body.roleId || user.roleId,
         })
-        .then(() => res.status(200).send({
-          email: user.email,
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          roleId: user.roleId
-        }))  // Send back the updated user.
+        .then(() => res.status(200).send(user))  // Send back the updated user.
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
   }
+
   /**
   * Delete a User
   * @param {Object} req Incoming HTTP request.

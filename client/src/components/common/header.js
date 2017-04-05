@@ -13,8 +13,6 @@ const Header = ({ isAuthenticated, logoutUser }) => (
       <Link to="profile" className="mdl-layout__tab">Profile</Link>
       <Link to="documents" className="mdl-layout__tab">Documents</Link>
       <Link to="about" className="mdl-layout__tab">About</Link>
-      <Link to="github" className="mdl-layout__tab">Github</Link>
-      <Link to="faq" className="mdl-layout__tab">FAQ</Link>
       {!isAuthenticated &&
         <Link to="login" className="mdl-layout__tab"> LogIn </Link>
               }

@@ -2,13 +2,15 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ValidatorForm } from 'react-material-ui-form-validator';
-import SignUp from '../../components/Auth/signup';
-import * as authActions from '../../actions/authActions';
+import Users from '../../components/Users/Users';
+import * as userActions from '../../actions/userActions';
+import * as tokenUtils from '../../utils/tokenUtility';
+import FlatButton from 'material-ui/FlatButton';
 
 /**
- * Represents a SignupWrapper class component.
+ * Represents a UserpWrapper class component.
  */
-class SignupWrapper extends React.Component {
+class UserWrapper extends React.Component {
   /**
  * @param {object} props  Redux store updates.
  * @param {object} context pass data through the component tree
@@ -17,14 +19,16 @@ class SignupWrapper extends React.Component {
     super(props, context);
     this.state = {
       user: {
-        username: '',
-        email: '',
-        firstName: '',
-        lastName: '',
+        id: props.userState.user.id,
+        username: props.userState.user.username,
+        email: props.userState.user.email,
+        firstName: props.userState.user.firstName,
+        lastName: props.userState.user.lastName,
         password: '',
         confirmPassword: ''
       },
-      error: ''
+      error: '',
+      open: false,
     };
     this.onEmailChange = this.onEmailChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
@@ -33,6 +37,8 @@ class SignupWrapper extends React.Component {
     this.onlastNameChange = this.onlastNameChange.bind(this);
     this.onusernameChange = this.onusernameChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
   /**
    * @override
@@ -45,12 +51,7 @@ class SignupWrapper extends React.Component {
       }
       return true;
     });
-    ValidatorForm.addValidationRule('passwordLength', (value) => {
-      if (value.length < 6) {
-        return false;
-      }
-      return true;
-    });
+    this.props.actions.getUser(JSON.parse(tokenUtils.getUserDetails()).id);
   }
 
   /**
@@ -59,18 +60,16 @@ class SignupWrapper extends React.Component {
  * @returns {void}
  */
   onSubmit() {
-    this.props.actions.signupUser(this.state.user).then(() => {
-      if(this.props.authState.errorMessage) {
-        return false
-      }
-      else {
-        this.context.router.push('/login');
-      }
-
-    });
-
+    // this.props.actions.signupUser(this.state.user);
+    // this.context.router.push('/login');
+  }
+  handleOpen() {
+    this.setState({ open: true });
   }
 
+  handleClose() {
+    this.setState({ open: false });
+  }
   /**
  * Modifies state.user.email when email is typed
  * @param {object} event The change event.
@@ -129,14 +128,37 @@ class SignupWrapper extends React.Component {
    * @override
    */
   render() {
+    const dialogActions = [
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        type="submit"
+        primary
+        keyboardFocused
+        onTouchTap={(e) => {
+          e.preventDefault();
+          this.props.actions.editUser(this.state.user);
+          this.handleClose();
+        }}
+      />,
+    ];
+
     return (
       <div>
-        {this.props.authState.errorMessage && <p className="alert alert-danger"> Email must be Unique </p>}
         <ValidatorForm
           ref="form"
           onSubmit={this.onSubmit}
         >
-          <SignUp
+          <Users
+            user={this.props.userState.user}
+            isFetching={this.props.userState.isFetching}
+            handleOpen={this.handleOpen}
+            state={this.state}
+            dialogActions={dialogActions}
             changeEmail={this.onEmailChange}
             changePassword={this.onPasswordChange}
             changePasswordConfirm={this.onConfirmPasswordChange}
@@ -144,21 +166,18 @@ class SignupWrapper extends React.Component {
             changeLastName={this.onlastNameChange}
             changeUsername={this.onusernameChange}
             submitForm={this.onSubmit}
-            user={this.state.user}
-            isFetching={this.props.authState.isFetching}
           />
-
         </ValidatorForm>
       </div>
 
     );
   }
 }
-SignupWrapper.propTypes = {
+UserWrapper.propTypes = {
   actions: PropTypes.object.isRequired,
-  authState: PropTypes.object.isRequired
+  userState: PropTypes.object.isRequired
 };
-SignupWrapper.contextTypes = {
+UserWrapper.contextTypes = {
   router: PropTypes.object
 };
 /**
@@ -166,7 +185,7 @@ SignupWrapper.contextTypes = {
  */
 function mapStateToProps(state) {
   return {
-    authState: state.auth
+    userState: state.user
   };
 }
 /**
@@ -174,7 +193,7 @@ function mapStateToProps(state) {
  */
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(authActions, dispatch)
+    actions: bindActionCreators(userActions, dispatch)
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(SignupWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(UserWrapper);

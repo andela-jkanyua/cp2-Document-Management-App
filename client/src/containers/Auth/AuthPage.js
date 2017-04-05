@@ -37,6 +37,12 @@ class AuthWrapper extends React.Component {
     if (token) {
       this.context.router.push('/');
     }
+    ValidatorForm.addValidationRule('passwordLength', (value) => {
+      if (value.length < 6) {
+        return false;
+      }
+      return true;
+    });
   }
 
   /**
@@ -84,6 +90,7 @@ class AuthWrapper extends React.Component {
    * @override
    */
   render() {
+    { this.props; }
     return (
       <div>
         <ValidatorForm

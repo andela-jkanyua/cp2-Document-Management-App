@@ -65,9 +65,9 @@ const SignUp = props => (
           type="password"
           name="password"
           value={props.user.password}
-          validators={['required']}
+          validators={['required', 'passwordLength']}
           onChange={props.changePassword}
-          errorMessages={['Password is required']}
+          errorMessages={['Password is required', 'Password must be greater than six(6) characters']}
         />
       </div>
 
