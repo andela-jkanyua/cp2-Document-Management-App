@@ -54,6 +54,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.9.0",
+    "eventsource-polyfill": "0.9.6",
     "express": "^4.14.1",
     "jquery": "^3.1.1",
     "jsonwebtoken": "^7.3.0",
