@@ -1,5 +1,5 @@
 import expect from 'expect';
-import React from 'React';
+import React, { PropTypes } from 'react';
 import {mount, shallow} from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
 import User from '../../../../client/src/components/Users/Users';
