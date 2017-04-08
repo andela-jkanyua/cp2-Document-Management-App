@@ -26,7 +26,7 @@ const searchDiv = {
   marginLeft: 590
 };
 
-class ViewDocuments extends React.Component {
+export class ViewDocuments extends React.Component {
   constructor(props, context) {
     super(props, context);
     const arr = props.documents.map(doc => doc.title);
@@ -151,7 +151,6 @@ class ViewDocuments extends React.Component {
         <br />
         <Dialog
           title="Create a new Document"
-          actions={dialogActions}
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}
@@ -164,6 +163,25 @@ class ViewDocuments extends React.Component {
             onContentChange={this.onContentChange}
           />
 
+          <FlatButton
+            label="Cancel"
+            primary
+            onTouchTap={this.handleClose}
+          />
+
+        <span id="createDocument">
+          <FlatButton
+            label="Create Document"
+            primary
+            keyboardFocused
+            onTouchTap={(e) => {
+              e.preventDefault();
+              this.props.actions.createDocument(this.state.document);
+              this.props.actions.loadDocuments();
+              this.handleClose();
+            }}
+          />
+        </span>
         </Dialog>
       </div>
     );

@@ -28,7 +28,7 @@ module.exports = (app) => {
     } else {
       // if there is no token
       // return an error
-      return res.sendFile(path.join(__dirname, '../../client/src/index.html'));
+      return res.status(403).sendFile(path.join(__dirname, '../../client/src/index.html'));
       //return res.status(403).json({ success: false, message: 'No token provided' });
     }
   });

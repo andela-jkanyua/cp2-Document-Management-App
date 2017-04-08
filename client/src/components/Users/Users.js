@@ -100,4 +100,13 @@ const Users = props => (
     </Dialog>
   </div>
   );
+  Users.propTypes = {
+    user: PropTypes.object.isRequired,
+    handleOpen: PropTypes.func.isRequired,
+    changeEmail: PropTypes.func.isRequired,
+    changePassword: PropTypes.func.isRequired,
+    changePasswordConfirm: PropTypes.func.isRequired,
+    changeUsername: PropTypes.func.isRequired,
+    submitForm: PropTypes.func.isRequired,
+  };
 export default Users;

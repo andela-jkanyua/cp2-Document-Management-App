@@ -19,6 +19,9 @@
  */
 process.env.NODE_ENV = 'test';
 
+const injectTapEventPlugin = require('react-tap-event-plugin');
+injectTapEventPlugin();
+
 // Register babel so that it will transpile ES6 to ES5
 // before our tests run.
 require('babel-register')();
@@ -37,6 +40,19 @@ var exposedProperties = ['window', 'navigator', 'document'];
 
 global.document = jsdom('');
 global.window = document.defaultView;
+if (!global.window.localStorage) {
+  global.window.localStorage = {
+    getItem(item) {
+      if(item==='userId') {
+        return '{"id":1,"email":"jimnahmagira@yahoo.com","roleId":2}';
+      }
+      else {
+        return false
+      }
+    },
+    setItem() {}
+  };
+}
 Object.keys(document.defaultView).forEach((property) => {
   if (typeof global[property] === 'undefined') {
     exposedProperties.push(property);

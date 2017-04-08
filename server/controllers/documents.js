@@ -16,12 +16,11 @@ class Document {
       .create({
         title: req.body.title,
         content: req.body.content,
-        dateCreated: req.body.dateCreated,
         userId: req.decoded.user.id || req.body.userId,
         access: req.body.access,
       })
       .then(documents => res.status(201).send(documents))
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(400).send({success:false, message: 'Document title must be unique'}));
   }
 
   /**
@@ -130,7 +129,7 @@ class Document {
           access: req.body.access || doc.access,
         })
         .then(() => res.status(200).send(doc))  // Send back the updated document.
-        .catch(error => res.status(400).send(error));
+        .catch(error => res.status(400).send({success:false, message: 'Document title must be unique'}));
     })
     .catch(error => res.status(400).send(error));
   }
@@ -152,7 +151,7 @@ class Document {
       }
       return doc
         .destroy()
-        .then(() => res.status(204).send(doc))
+        .then(() => res.status(204).send({success: true, message: "Document Deleted"}))
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));

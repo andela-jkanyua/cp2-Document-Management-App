@@ -36,7 +36,7 @@ const Document = props => (
       <CardHeader
         className="card-header"
         textStyle={{ paddingLeft: 10, verticalAlign: 'middle' }}
-        title={`${props.document.User.firstName} ${props.document.User.lastName} `}
+        title={`${props.document.User.firstName} ${props.document.User.lastName}`}
         subtitle={`Created on: ${new Date(props.document.createdAt).toUTCString()}`}
         actAsExpander
       >

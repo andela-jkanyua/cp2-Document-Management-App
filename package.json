@@ -11,7 +11,8 @@
     "start": "node ./server/server.js",
     "lint": "node_modules/.bin/esw webpack.config.* client server",
     "lint:watch": "npm run lint -- --watch",
-    "test-server": "NODE_ENV=test && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && ./node_modules/.bin/istanbul cover _mocha -- -R spec --require babel-register --timeout 20000 \"test/server/**/*.js\"",
+    "pretest": "NODE_ENV=test && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
+    "test-server": "./node_modules/.bin/istanbul cover _mocha -- -R spec --require babel-register --timeout 20000 \"test/server/**/*.js\"",
     "test-client": "mocha --reporter spec test/client/setup.js \"test/client/**/*.js\"",
     "test": "npm-run-all --parallel test-client test-server",
     "coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"

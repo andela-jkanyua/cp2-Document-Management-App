@@ -10,7 +10,7 @@ import FlatButton from 'material-ui/FlatButton';
 /**
  * Represents a UserpWrapper class component.
  */
-class UserWrapper extends React.Component {
+export class UserWrapper extends React.Component {
   /**
  * @param {object} props  Redux store updates.
  * @param {object} context pass data through the component tree
@@ -155,7 +155,6 @@ class UserWrapper extends React.Component {
         >
           <Users
             user={this.props.userState.user}
-            isFetching={this.props.userState.isFetching}
             handleOpen={this.handleOpen}
             state={this.state}
             dialogActions={dialogActions}

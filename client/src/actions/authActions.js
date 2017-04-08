@@ -41,8 +41,7 @@ export function loginError(message) {
     type: constants.LOGIN_FAILURE,
     isFetching: false,
     isAuthenticated: false,
-    message: JSON.parse(message.text)
-
+    message
   };
 }
 

@@ -21,7 +21,7 @@ const DocumentList = ({ documents, handleOpen, style, onUpdate, error, deleteDoc
         />
       )}
     <div>
-      <FloatingActionButton onClick={handleOpen} style={style}>
+      <FloatingActionButton onClick={handleOpen} style={style} id="addDoc">
         <ContentAdd />
       </FloatingActionButton>
     </div>

@@ -69,7 +69,7 @@ class User {
   static create(req, res) {
     if (req.body.email === undefined || req.body.password === undefined ||
        req.body.username === undefined || req.body.firstName === undefined
-     || req.body.lastName === undefined || req.body.roleId === undefined) {
+     || req.body.lastName === undefined) {
       return res.status(400).send({
         success: false,
         message: 'Please provide \'email\', \'password\', \'username\', \'firstName\', \'lastName\', \'roleId\'' });
@@ -89,10 +89,10 @@ class User {
           username: req.body.username,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
-          roleId: req.body.roleId,
+          roleId: req.body.roleId || 2,
         })
-      .then(user => res.status(201).send({ message: ` User email:, ${user.email} Created!`, success: true }))
-      .catch(error => res.status(400).send(error));
+      .then(user => res.status(201).send({ message: ` User email: ${user.email}, Created!`, success: true }))
+      .catch(error => res.status(400).send({success: false, message: 'Dublicate email error. Email must be unique'}));
       });
     });
   }
@@ -200,7 +200,7 @@ class User {
       }
       return user
         .destroy()
-        .then(() => res.status(204).send(user))
+        .then(() => res.status(204).send({success: true, message: "User Deleted"}))
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));

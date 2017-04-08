@@ -9,7 +9,7 @@ import * as authActions from '../../actions/authActions';
 /**
  * Represents a AuthWrapper class component.
  */
-class AuthWrapper extends React.Component {
+export class AuthWrapper extends React.Component {
 
   /**
  * @param {object} props  Redux store updates.
@@ -90,7 +90,6 @@ class AuthWrapper extends React.Component {
    * @override
    */
   render() {
-    { this.props; }
     return (
       <div>
         <ValidatorForm
