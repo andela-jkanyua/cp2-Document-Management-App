@@ -34,7 +34,8 @@ DELETE | /api/users/id |This endpoint deletes a user from the system
 GET | /api/search/users?| This endpoint searches a user by query param
 
 **Documents**
-VERB| Endpoint | Action
+
+VERB | Endpoint | Action
 ------------ | -------- | ------
 POST | /api/documents | This endpoint creates a new document
 GET | /api/documents/:id | This endpoint gets a specific document
