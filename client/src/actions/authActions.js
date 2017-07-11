@@ -41,8 +41,7 @@ export function loginError(message) {
     type: constants.LOGIN_FAILURE,
     isFetching: false,
     isAuthenticated: false,
-    message: JSON.parse(message.text)
-
+    message
   };
 }
 
@@ -104,7 +103,6 @@ export function signupError(error) {
     isFetching: false,
     isSignedUp: error.success,
     message: error
-
   };
 }
 
@@ -120,6 +118,7 @@ export function loginUser(credentials) {
         .send(credentials)
         .then((response) => {
           tokenUtils.setAuthToken(response.body.token);
+          tokenUtils.setUserDetails(JSON.stringify(response.body.user));
           dispatch(receiveLogin(response.body));
         }).catch((err) => {
           dispatch(loginError(err.response));
@@ -156,6 +155,7 @@ export function logoutUser() {
   return (dispatch) => {
     dispatch(requestLogout());
     tokenUtils.removeAuthToken();
+    tokenUtils.removeUserDetails();
     dispatch(receiveLogout());
   };
 }

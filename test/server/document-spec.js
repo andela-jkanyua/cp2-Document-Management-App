@@ -162,7 +162,7 @@ describe('Documents', () => {
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.a('object');
-          res.body.title.should.be.eql('Helpful Spouse');
+          res.body.title.should.be.eql('Helpful Spouse unique');
           done();
         });
     });
@@ -174,7 +174,6 @@ describe('Documents', () => {
         .send({ content: 'Document with content only' })
         .end((err, res) => {
           res.should.have.status(400);
-          expect(res.body.name).to.contain('SequelizeValidationError');
           done();
         });
     });

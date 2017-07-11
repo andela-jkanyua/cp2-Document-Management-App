@@ -135,6 +135,18 @@ describe('Users', () => {
       });
     });
 
+    it('should return error if email is not unique', (done) => {
+      chai.request(server)
+      .post('/api/users')
+      .send(Users[1])
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.success.should.be.eql(false);
+        res.body.message.should.be.eql("Dublicate email error. Email must be unique");
+        done();
+      });
+    });
     it('should NOT POST a user without all fields', (done) => {
       const invalidUser = {
         email: 'test@test.com',

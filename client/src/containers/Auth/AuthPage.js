@@ -9,7 +9,7 @@ import * as authActions from '../../actions/authActions';
 /**
  * Represents a AuthWrapper class component.
  */
-class AuthWrapper extends React.Component {
+export class AuthWrapper extends React.Component {
 
   /**
  * @param {object} props  Redux store updates.
@@ -37,6 +37,12 @@ class AuthWrapper extends React.Component {
     if (token) {
       this.context.router.push('/');
     }
+    ValidatorForm.addValidationRule('passwordLength', (value) => {
+      if (value.length < 6) {
+        return false;
+      }
+      return true;
+    });
   }
 
   /**

@@ -35,8 +35,8 @@ const Auth = props => (
           name="password"
           value={props.user.password}
           onChange={props.onPasswordChange}
-          validators={['required']}
-          errorMessages={['Password is required']}
+          validators={['required', 'passwordLength']}
+          errorMessages={['Password is required', 'Password must be greater than six (6) characters']}
         />
       </div>
       <div>

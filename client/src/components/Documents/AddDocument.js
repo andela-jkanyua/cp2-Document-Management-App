@@ -28,12 +28,13 @@ const AddDocument = props => (
     /><br /> <br />
 
     <SelectField
+      id="selectAccess"
       floatingLabelText="Access"
       value={props.doc.access}
       onChange={props.onSetAccess}
     >
-      <MenuItem value={'public'} primaryText="Public" />
-      <MenuItem value={'private'} primaryText="Private" />
+      <MenuItem value={'public'} primaryText="Public" id="public"/>
+      <MenuItem value={'private'} primaryText="Private" id="private" />
 
     </SelectField>
   </div>

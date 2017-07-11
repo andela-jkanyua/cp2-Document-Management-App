@@ -57,7 +57,7 @@ class Role {
       }
       return role
         .destroy()
-        .then(() => res.status(204).send(role))
+        .then(() => res.status(204).send({success: true, message: "Role Deleted"}))
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));

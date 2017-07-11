@@ -45,6 +45,12 @@ class SignupWrapper extends React.Component {
       }
       return true;
     });
+    ValidatorForm.addValidationRule('passwordLength', (value) => {
+      if (value.length < 6) {
+        return false;
+      }
+      return true;
+    });
   }
 
   /**
@@ -53,8 +59,16 @@ class SignupWrapper extends React.Component {
  * @returns {void}
  */
   onSubmit() {
-    this.props.actions.signupUser(this.state.user);
-    this.context.router.push('/login');
+    this.props.actions.signupUser(this.state.user).then(() => {
+      if(this.props.authState.errorMessage) {
+        return false
+      }
+      else {
+        this.context.router.push('/login');
+      }
+
+    });
+
   }
 
   /**
@@ -117,6 +131,7 @@ class SignupWrapper extends React.Component {
   render() {
     return (
       <div>
+        {this.props.authState.errorMessage && <p className="alert alert-danger"> Email must be Unique </p>}
         <ValidatorForm
           ref="form"
           onSubmit={this.onSubmit}

@@ -30,7 +30,7 @@ module.exports = {
         userId: 4,
         access: 'private',
       }, {
-        title: 'Li Europan lingues es membres ',
+        title: 'Li Europan lingues es membres uno',
         content: 'At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles....',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 const secret = process.env.SECRET;
 
@@ -27,7 +28,8 @@ module.exports = (app) => {
     } else {
       // if there is no token
       // return an error
-      return res.status(403).json({ success: false, message: 'No token provided' });
+      return res.status(403).sendFile(path.join(__dirname, '../../client/src/index.html'));
+      //return res.status(403).json({ success: false, message: 'No token provided' });
     }
   });
 };

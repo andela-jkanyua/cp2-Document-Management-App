@@ -1,10 +1,11 @@
 import * as types from '../actions/actionTypes';
 import * as tokenUtils from '../utils/tokenUtility';
 
-export default function authReducer(state = {
-  isFetching: false,
-  isAuthenticated: !!tokenUtils.getAuthToken()
-}, action) {
+export default function authReducer(
+  state = {
+    isFetching: false,
+    isAuthenticated: !!tokenUtils.getAuthToken()
+  }, action) {
   switch (action.type) {
     case types.LOGIN_REQUEST:
       return Object.assign({}, state, {
@@ -33,19 +34,16 @@ export default function authReducer(state = {
     case types.SIGNUP_REQUEST:
       return Object.assign({}, state, {
         isFetching: true,
-        isSignedUp: false,
       });
     case types.SIGNUP_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
-        isSignedUp: true,
-        errorMessage: '',
+        errorMessage: null,
       });
     case types.SIGNUP_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
-        isSignedUp: false,
-        errorMessage: 'Server Error.'
+        errorMessage: action.message
       });
     default:
       return state;
